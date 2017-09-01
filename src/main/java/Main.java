@@ -16,9 +16,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AMChartsGui.fxml"));
-        window.setTitle("AMChartsGui");
-        window.setScene(new Scene(root, 600, 500));
-        //window.setResizable(false);
+        window.setTitle("Apple Music Charts");
+        window.setScene(new Scene(root, 640, 382));
+        window.setResizable(false);
         window.show();
     }
 
