@@ -104,6 +104,10 @@ public class Controller {
 
             JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
 
+            JsonObject artwork = attributes.get("artwork").getAsJsonObject();
+
+            String artworkUrl = artwork.get("url").getAsString();
+
             String albumName = attributes.get("name").getAsString();
 
             String artistName = attributes.get("artistName").getAsString();
@@ -129,14 +133,14 @@ public class Controller {
                     .append(recordLabel)
                     .append("; ")
                     .append(recordLabel)
+                    .append("; ")
+                    .append(artworkUrl)
                     .append("\n");
 
 
         }
         this.chartsTextArea.setText(result.toString());
 
-
-        System.out.println("IT WORKS!");
     }
 
     @FXML
