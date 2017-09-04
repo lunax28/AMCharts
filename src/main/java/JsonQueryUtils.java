@@ -20,6 +20,7 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
+import java.util.prefs.Preferences;
 
 public class JsonQueryUtils {
 
@@ -55,6 +56,19 @@ public class JsonQueryUtils {
         long expiryMillis = 1503890102;
         Date now = new Date(nowMillis);
         Date expiry = new Date(nowMillis + 100000000);
+        /**
+
+        // Retrieve the user preference node for the package com.mycompany
+        Preferences prefs = Preferences.userNodeForPackage(JsonQueryUtils.class);
+
+        // Preference key name
+        final String PREF_NAME = "jwt_expiration_date";
+
+        // Set the value of the preference
+        String expiryPref = expiry.toString();
+        prefs.put(PREF_NAME, expiryPref);
+         */
+
 
         System.out.println("EXP: " + expiry.toString());
         System.out.println("NOW: " + now.toString());
@@ -89,8 +103,7 @@ public class JsonQueryUtils {
             }
              */
 
-            String basicAuth = "Bearer " + "eyJhbGciOiJFUzI1NiIsImtpZCI6IkI5M0s5Wjg4TlUifQ.eyJpYXQiOjE1MDQyNjEyMTgsImV4cCI6MTUwNDM2MTIxOCwiaXNzIjoiQjY4Mzg1SDk1QSJ9.qsRFSK800LfDU1AZLLuuu0lD7uyW5mLnkDX2IPZyv9l5Mz4dLPz-1t4u6PTt1fxaUUOznBnktzeIUfk93TG-SA";
-            getToken(); //"BQBERpBRRUeuZ4tjxtRBq__FrTpEaecFUmTCd9gwgvwmcGqie5SVMum-RQRATj5FMlsyeg5WuWj6W7qkUnjFwQ"; //getToken();//"BQD5PgY20-9WFB0xWoKAKF8Lip7z_it6HG__w0lxzdRaS8NGhtx-AfGhumYKK3sO5Zn3tEBjcBqWxxFRlum7bA"; //+ token;
+            String basicAuth = "Bearer " + "eyJhbGciOiJFUzI1NiIsImtpZCI6IkI5M0s5Wjg4TlUifQ.eyJpYXQiOjE1MDQ1MTIxOTYsImV4cCI6MTUwNDYxMjE5NiwiaXNzIjoiQjY4Mzg1SDk1QSJ9.5eYGrhFn52WDeOAYgIP-VGWyU9U4d2EPN6-qFi1qHE1P7U7yBv7-K2cNSPSlFznuMM7-MDYPeuTvLE0Xfy6mig";
 
             httpCon.setRequestMethod("GET");
             httpCon.setRequestProperty("Authorization", basicAuth);

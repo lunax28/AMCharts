@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controller {
 
@@ -39,12 +41,40 @@ public class Controller {
 
     @FXML
     private ChoiceBox<String> genreChoiceBox;
-    ObservableList<String> genreObsList = FXCollections.observableArrayList("13","12","11","10");
+    ObservableList<String> genreObsList = FXCollections.observableArrayList("Blues",
+            "Children’s Music",
+            "Classical",
+            "Country",
+            "Electronic",
+            "Holiday",
+            "Jazz",
+            "Latino",
+            "New Age",
+            "Soundtrack",
+            "Dance",
+            "World",
+            "Alternative",
+            "Easy Listening",
+            "Fitness & Workout",
+            "Instrumental",
+            "Environmental",
+            "Healing",
+            "Meditation",
+            "Nature",
+            "Relaxation",
+            "Travel",
+            "Ambient",
+            "Lounge");
+
+
+    @FXML
+    private Map<String, Integer> genreMap;
 
 
     public Controller(){
 
         this.apiQuery  = new JsonQueryUtils();
+        genreMap = new HashMap<String, Integer>();
 
     }
 
@@ -52,10 +82,30 @@ public class Controller {
     private void initialize(){
 
         this.countryChoiceBox.setValue("us");
-        this.genreChoiceBox.setValue("13");
+        this.genreChoiceBox.setValue("New Age");
         this.countryChoiceBox.setItems(this.countryObsList);
         this.genreChoiceBox.setItems(this.genreObsList);
-
+        genreMap.put("Blues",2);
+        genreMap.put("Children’s Music",4);
+        genreMap.put("Classical",5);
+        genreMap.put("Country",6);
+        genreMap.put("Electronic",7);
+        genreMap.put("Holiday",8);
+        genreMap.put("Jazz",11);
+        genreMap.put("New Age",13);
+        genreMap.put("Soundtrack",16);
+        genreMap.put("Dance",17);
+        genreMap.put("World",19);
+        genreMap.put("Alternative",20);
+        genreMap.put("Easy Listening",25);
+        genreMap.put("Fitness & Workout",50);
+        genreMap.put("Environmental",1125);
+        genreMap.put("Healing",1126);
+        genreMap.put("Meditation",1127);
+        genreMap.put("Nature",1128);
+        genreMap.put("Relaxation",1129);
+        genreMap.put("Ambient",1056);
+        genreMap.put("Lounge",1054);
 
     }
 
@@ -70,11 +120,18 @@ public class Controller {
     @FXML
     public void getButtonAction() throws InvalidKeySpecException, NoSuchAlgorithmException {
 
+
+        //System.out.println("MAP BLUES: " + this.genreMap.get("Blues"));
+        //System.out.println("genreChoiceBox get value: " + this.genreChoiceBox.getValue());
+        //System.out.println("MAP get value: " + this.genreMap.get(this.genreChoiceBox.getValue()));
+
+
         StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
+
 
         link.append(this.countryChoiceBox.getValue());
         link.append("/charts?types=albums&genre=");
-        link.append(this.genreChoiceBox.getValue());
+        link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
         link.append("&limit=10");
 
         System.out.println("LINK IS: " + link.toString());
