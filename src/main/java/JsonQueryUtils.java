@@ -40,8 +40,6 @@ public class JsonQueryUtils {
     }
 
 
-
-
     private String getToken() throws NoSuchAlgorithmException, InvalidKeySpecException {
         String secret = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg247w7fZYc27Dr/cBJc5laTJFwLJLgs9jQaSeUfVU1kygCgYIKoZIzj0DAQehRANCAATOLyYZpBnAweJPU/FG4j0oA/z/qLTS7OJ5P839h9Rtngfs564at6azXK7udrYsTkRVZcpCJ7H5P8cPELcF7uUQ";
 
@@ -61,16 +59,11 @@ public class JsonQueryUtils {
         Date now = new Date(nowMillis);
         Date expiry = new Date(nowMillis + 100000000);
 
-
         long expiryPref = nowMillis + 300000L;
 
         preferences.getLong("expiry",0);
 
-
         preferences.putLong("expiry", expiryPref);
-
-
-
 
         System.out.println("EXP: " + expiry.toString());
         System.out.println("NOW: " + now.toString());
@@ -153,14 +146,12 @@ public class JsonQueryUtils {
             if (this.responseCode != 200) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning!");
-                //alert.setHeaderText("Alberto Vecchi");
                 alert.setContentText("An error has occured. Rate limit probably reached");
-
                 alert.showAndWait();
-
                 return null;
 
             }
+
             System.out.println("\nSending 'GET' request to URL : " + url);
             System.out.println("Response Code : " + responseCode);
 
@@ -171,8 +162,8 @@ public class JsonQueryUtils {
             while ((inputLine = in.readLine()) != null) {
                 response += inputLine;
             }
-
             in.close();
+
         } catch (MalformedURLException ex) {
             System.out.println("MalformedURLException!!");
         } catch (ProtocolException ex) {
@@ -185,15 +176,7 @@ public class JsonQueryUtils {
 
         this.jsonObject = new JsonParser().parse(responseTrimmed).getAsJsonObject();
         System.out.println("jsonobj: " + this.jsonObject.toString());
-
         return this.jsonObject;
 
     }
-
-
-
-
-
-
-
 }

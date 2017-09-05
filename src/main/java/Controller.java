@@ -125,19 +125,12 @@ public class Controller {
     @FXML
     public void getButtonAction() throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-
-        //System.out.println("MAP BLUES: " + this.genreMap.get("Blues"));
-        //System.out.println("genreChoiceBox get value: " + this.genreChoiceBox.getValue());
-        //System.out.println("MAP get value: " + this.genreMap.get(this.genreChoiceBox.getValue()));
-
-
         StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
-
 
         link.append(this.countryChoiceBox.getValue());
         link.append("/charts?types=albums&genre=");
         link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
-        link.append("&limit=25");
+        link.append("&limit=50");
 
         System.out.println("LINK IS: " + link.toString());
 
@@ -214,6 +207,16 @@ public class Controller {
         if(this.sourceFolderPath != null){
             this.sourceLabel.setText(this.sourceFolderPath.getAbsolutePath().toString());
         }
+
+    }
+
+    @FXML
+    public void aboutItemAction() {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("AMCharts v1.0");
+        alert.setHeaderText("AMCharts v1.0\n");
+        alert.showAndWait();
 
     }
 

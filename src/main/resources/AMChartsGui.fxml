@@ -10,36 +10,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
-   <children>
-      <MenuBar prefHeight="29.0" prefWidth="640.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <ChoiceBox fx:id="countryChoiceBox" layoutX="105.0" layoutY="59.0" prefHeight="27.0" prefWidth="75.0" />
-      <ChoiceBox fx:id="genreChoiceBox" layoutX="270.0" layoutY="59.0" prefHeight="27.0" prefWidth="163.0" />
-      <Button fx:id="getButton" layoutX="526.0" layoutY="59.0" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="75.0" text="GET">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
-      <Label layoutX="33.0" layoutY="64.0" text="Country:" />
-      <Label layoutX="212.0" layoutY="64.0" text="Genre:" />
-      <TextArea fx:id="chartsTextArea" layoutX="33.0" layoutY="114.0" prefHeight="246.0" prefWidth="572.0" promptText="The top chart will show up here:" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <children>
+        <MenuBar prefHeight="29.0" prefWidth="640.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#aboutItemAction" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <ChoiceBox fx:id="countryChoiceBox" layoutX="105.0" layoutY="59.0" prefHeight="27.0" prefWidth="75.0" />
+        <ChoiceBox fx:id="genreChoiceBox" layoutX="270.0" layoutY="59.0" prefHeight="27.0" prefWidth="163.0" />
+        <Button fx:id="getButton" layoutX="526.0" layoutY="59.0" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="75.0" text="GET">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Button>
+        <Label layoutX="33.0" layoutY="64.0" text="Country:" />
+        <Label layoutX="212.0" layoutY="64.0" text="Genre:" />
+        <TextArea fx:id="chartsTextArea" layoutX="33.0" layoutY="114.0" prefHeight="246.0" prefWidth="572.0" promptText="The top chart will show up here:" />
+    </children>
 </AnchorPane>
