@@ -106,6 +106,11 @@ public class Controller {
         genreMap.put("Relaxation",1129);
         genreMap.put("Ambient",1056);
         genreMap.put("Lounge",1054);
+        genreMap.put("Instrumental",53);
+        genreMap.put("Travel", 1130);
+        genreMap.put("Latino",12);
+        genreMap.put("Ambient", 1056);
+        genreMap.put("Lounge", 1054);
 
     }
 
@@ -132,7 +137,7 @@ public class Controller {
         link.append(this.countryChoiceBox.getValue());
         link.append("/charts?types=albums&genre=");
         link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
-        link.append("&limit=10");
+        link.append("&limit=25");
 
         System.out.println("LINK IS: " + link.toString());
 

@@ -20,6 +20,7 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class JsonQueryUtils {
@@ -27,6 +28,9 @@ public class JsonQueryUtils {
     private int responseCode;
     private String responseTrimmed;
     private JsonObject jsonObject;
+    private String builderString;
+
+    private Preferences preferences = Preferences.userNodeForPackage(JsonQueryUtils.class);
 
     public JsonQueryUtils() {
 
@@ -38,7 +42,7 @@ public class JsonQueryUtils {
 
 
 
-    private static String getToken() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private String getToken() throws NoSuchAlgorithmException, InvalidKeySpecException {
         String secret = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg247w7fZYc27Dr/cBJc5laTJFwLJLgs9jQaSeUfVU1kygCgYIKoZIzj0DAQehRANCAATOLyYZpBnAweJPU/FG4j0oA/z/qLTS7OJ5P839h9Rtngfs564at6azXK7udrYsTkRVZcpCJ7H5P8cPELcF7uUQ";
 
         //The JWT signature algorithm we will be using to sign the token
@@ -53,21 +57,19 @@ public class JsonQueryUtils {
         long nowMillis = System.currentTimeMillis();
 
         System.out.println("nowMillis: " + nowMillis);
-        long expiryMillis = 1503890102;
+        //long expiryMillis = 1503890102;
         Date now = new Date(nowMillis);
         Date expiry = new Date(nowMillis + 100000000);
-        /**
 
-        // Retrieve the user preference node for the package com.mycompany
-        Preferences prefs = Preferences.userNodeForPackage(JsonQueryUtils.class);
 
-        // Preference key name
-        final String PREF_NAME = "jwt_expiration_date";
+        long expiryPref = nowMillis + 300000L;
 
-        // Set the value of the preference
-        String expiryPref = expiry.toString();
-        prefs.put(PREF_NAME, expiryPref);
-         */
+        preferences.getLong("expiry",0);
+
+
+        preferences.putLong("expiry", expiryPref);
+
+
 
 
         System.out.println("EXP: " + expiry.toString());
@@ -83,6 +85,15 @@ public class JsonQueryUtils {
                 .signWith(signatureAlgorithm, eckey);
 
         System.out.println("BUILDER: " + builder.compact());
+
+
+        this.builderString = builder.compact().toString();
+
+        preferences.get("builderString","");
+
+
+        preferences.put("builderString", builder.compact().toString());
+
 
         return builder.compact().toString();
 
@@ -103,7 +114,36 @@ public class JsonQueryUtils {
             }
              */
 
-            String basicAuth = "Bearer " + "eyJhbGciOiJFUzI1NiIsImtpZCI6IkI5M0s5Wjg4TlUifQ.eyJpYXQiOjE1MDQ1MTIxOTYsImV4cCI6MTUwNDYxMjE5NiwiaXNzIjoiQjY4Mzg1SDk1QSJ9.5eYGrhFn52WDeOAYgIP-VGWyU9U4d2EPN6-qFi1qHE1P7U7yBv7-K2cNSPSlFznuMM7-MDYPeuTvLE0Xfy6mig";
+            String basicAuth = "";
+
+
+
+            long prefExpiry = preferences.getLong("expiry",0);
+
+            System.out.println("prefExpiry: " + prefExpiry);
+
+            System.out.println("System.currentTimeMillis(): " + System.currentTimeMillis());
+
+            String prefBuilder = preferences.get("builderString","");
+
+            System.out.println("preferences.get(builderString,0): " + preferences.get("builderString",""));
+
+
+
+            if(preferences.getLong("expiry",0) < System.currentTimeMillis() || preferences.get("builderString","") == null) {
+                /**
+                try {
+                    preferences.clear();
+                } catch (BackingStoreException e) {
+                    e.printStackTrace();
+                }
+                 */
+                basicAuth = "Bearer " + getToken();
+            } else {
+                basicAuth = "Bearer " + preferences.get("builderString","");
+            }
+
+                    //"eyJhbGciOiJFUzI1NiIsImtpZCI6IkI5M0s5Wjg4TlUifQ.eyJpYXQiOjE1MDQ1MTIxOTYsImV4cCI6MTUwNDYxMjE5NiwiaXNzIjoiQjY4Mzg1SDk1QSJ9.5eYGrhFn52WDeOAYgIP-VGWyU9U4d2EPN6-qFi1qHE1P7U7yBv7-K2cNSPSlFznuMM7-MDYPeuTvLE0Xfy6mig";
 
             httpCon.setRequestMethod("GET");
             httpCon.setRequestProperty("Authorization", basicAuth);
