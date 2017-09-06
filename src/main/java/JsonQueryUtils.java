@@ -57,9 +57,9 @@ public class JsonQueryUtils {
         System.out.println("nowMillis: " + nowMillis);
         //long expiryMillis = 1503890102;
         Date now = new Date(nowMillis);
-        Date expiry = new Date(nowMillis + 100000000);
+        Date expiry = new Date(nowMillis + 3100100100L);
 
-        long expiryPref = nowMillis + 300000L;
+        long expiryPref = nowMillis + 3100100100L;
 
         preferences.getLong("expiry",0);
 

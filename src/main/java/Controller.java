@@ -161,17 +161,65 @@ public class Controller {
 
             JsonObject artwork = attributes.get("artwork").getAsJsonObject();
 
-            String artworkUrl = artwork.get("url").getAsString();
 
-            String albumName = attributes.get("name").getAsString();
+            String artworkUrl = "";
+            if(this.checkNode(artwork, "url")){
+                artworkUrl = artwork.get("url").getAsString();
+            } else {
+                artworkUrl = "NOT FOUND";
+            }
 
-            String artistName = attributes.get("artistName").getAsString();
-            //String id = attributes.get("id").getAsString();
-            String url = attributes.get("url").getAsString();
-            int trackCount = attributes.get("trackCount").getAsInt();
-            String releaseDate = attributes.get("releaseDate").getAsString();
-            String recordLabel = attributes.get("recordLabel").getAsString();
-            String copyright = attributes.get("copyright").getAsString();
+
+            String albumName = "";
+            if(this.checkNode(attributes, "name")){
+                albumName = attributes.get("name").getAsString();
+            } else {
+                albumName = "NOT FOUND";
+            }
+
+            String artistName = "";
+            if(this.checkNode(attributes, "artistName")){
+                 artistName = attributes.get("artistName").getAsString();
+            } else {
+                 artistName = "NOT FOUND";
+            }
+
+
+            String url = "";
+            if(this.checkNode(attributes, "url")){
+                 url = attributes.get("url").getAsString();
+            } else {
+                 url = "NOT FOUND";
+            }
+
+
+            int trackCount = 0;
+            if(this.checkNode(attributes, "trackCount")){
+                trackCount = attributes.get("trackCount").getAsInt();
+            }
+
+            String releaseDate = "";
+            if(this.checkNode(attributes, "releaseDate")){
+                 releaseDate = attributes.get("releaseDate").getAsString();
+            } else {
+                 releaseDate = "NOT FOUND";
+            }
+
+
+            String recordLabel = "";
+            if(this.checkNode(attributes, "recordLabel")){
+                 recordLabel = attributes.get("recordLabel").getAsString();
+            } else {
+                 recordLabel = "NOT FOUND";
+            }
+
+
+            String copyright = "";
+            if(this.checkNode(attributes, "copyright")){
+                 copyright = attributes.get("copyright").getAsString();
+            } else {
+                 copyright = "NOT FOUND";
+            }
 
 
             result.append(i+1+"; ")
@@ -187,7 +235,7 @@ public class Controller {
                     .append("; ")
                     .append(recordLabel)
                     .append("; ")
-                    .append(recordLabel)
+                    .append(copyright)
                     .append("; ")
                     .append(artworkUrl)
                     .append("\n");
@@ -195,6 +243,13 @@ public class Controller {
 
         }
         this.chartsTextArea.setText(result.toString());
+
+    }
+
+    @FXML
+    private Boolean checkNode(JsonObject gson, String key){
+
+        return gson.has(key);
 
     }
 
