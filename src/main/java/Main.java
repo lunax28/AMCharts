@@ -4,6 +4,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The AMCharts program implements an application that
+ * retrieves the top charts from the Apple Music API.
+ *
+ * @author  lunax28
+ * @version 1.0
+ * @since   2017-09-07
+ */
+
 public class Main extends Application {
 
     Stage window;

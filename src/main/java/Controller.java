@@ -2,19 +2,21 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Controller used by JavaFX to generate a GUI application
+ */
+
 public class Controller {
+
+    private String nextLink;
 
     @FXML
     private TextArea chartsTextArea;
@@ -23,25 +25,19 @@ public class Controller {
     private JsonQueryUtils apiQuery;
 
     @FXML
-    private Label sourceLabel;
-
-    @FXML
-    private Button outputButton;
-
-    @FXML
-    private Button getButton;
-
-    @FXML
     private File sourceFolderPath;
 
     @FXML
     private ChoiceBox<String> countryChoiceBox;
 
-    ObservableList<String> countryObsList = FXCollections.observableArrayList("us","es","de","it","pt");
+    @FXML
+    private ObservableList<String> countryObsList = FXCollections.observableArrayList("us","es","de","it","pt");
 
     @FXML
     private ChoiceBox<String> genreChoiceBox;
-    ObservableList<String> genreObsList = FXCollections.observableArrayList("Blues",
+
+    @FXML
+    private ObservableList<String> genreObsList = FXCollections.observableArrayList("Blues",
             "Children’s Music",
             "Classical",
             "Country",
@@ -66,17 +62,16 @@ public class Controller {
             "Ambient",
             "Lounge");
 
-
     @FXML
     private Map<String, Integer> genreMap;
 
 
+
     public Controller(){
-
         this.apiQuery  = new JsonQueryUtils();
-        genreMap = new HashMap<String, Integer>();
-
+        genreMap = new HashMap<>();
     }
+
 
     @FXML
     private void initialize(){
@@ -114,14 +109,6 @@ public class Controller {
 
     }
 
-
-    @FXML
-    public void outputButtonAction(){
-
-
-        System.out.println("IT WORKS!");
-    }
-
     @FXML
     public void getButtonAction() throws InvalidKeySpecException, NoSuchAlgorithmException {
 
@@ -134,145 +121,173 @@ public class Controller {
 
         System.out.println("LINK IS: " + link.toString());
 
+        this.getCharts(link.toString());
 
-        JsonObject jsonResponse = apiQuery.getJson(link.toString());
-        System.out.println("JSON RESPONSE: " + jsonResponse.toString());
+    }
 
+    /**
+     * This method is used to parse the <code>jsonResponse</code> from the <code>JsonQueryUtils</code>class.
+     * @param link This is the first paramter to addNum method
+     * @return void
+     */
+    private void getCharts(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-        JsonObject results = jsonResponse.get("results").getAsJsonObject();
-
-        JsonArray albums = results.get("albums").getAsJsonArray();
-
-        JsonObject data = albums.get(0).getAsJsonObject();
-
-        JsonArray dataArray = data.get("data").getAsJsonArray();
-
-        int sizeDataArray = dataArray.size();
-        System.out.println("size data array: " + sizeDataArray);
-
+        //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
 
+        //helper variable to store the numerical position of each album in the list
+        int position = 1;
 
-        for(int i = 0; i < sizeDataArray; i++){
+        //this variable limits the search for additional pages if the "next" field
+        //is absent. Otherwise it is set to 6.
+        int loopLimit = 1;
 
-            JsonObject firstResult = dataArray.get(i).getAsJsonObject();
+        //for loop to retrieve 6 pages of charts. Look at the AM API doc
+        for(int x = 0; x < loopLimit; x++) {
 
-            JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+            JsonObject jsonResponse = apiQuery.getJson(link);
 
-            JsonObject artwork = attributes.get("artwork").getAsJsonObject();
+            System.out.println("JSON RESPONSE: " + jsonResponse.toString());
 
+            JsonObject results = jsonResponse.get("results").getAsJsonObject();
 
-            String artworkUrl = "";
-            if(this.checkNode(artwork, "url")){
-                artworkUrl = artwork.get("url").getAsString();
-            } else {
-                artworkUrl = "NOT FOUND";
+            JsonArray albums = results.get("albums").getAsJsonArray();
+
+            JsonObject data = albums.get(0).getAsJsonObject();
+
+            if (this.checkNode(data, "next")) {
+                loopLimit = 6;
+                this.nextLink = data.get("next").getAsString();
             }
 
+            System.out.println("this.nextLink: " + this.nextLink);
 
-            String albumName = "";
-            if(this.checkNode(attributes, "name")){
-                albumName = attributes.get("name").getAsString();
-            } else {
-                albumName = "NOT FOUND";
+            JsonArray dataArray = data.get("data").getAsJsonArray();
+
+            int sizeDataArray = dataArray.size();
+            System.out.println("size data array: " + sizeDataArray);
+
+            //after reaching the correct field we loop over each album to retrieve the info
+            for (int i = 0; i < sizeDataArray; i++) {
+
+                JsonObject firstResult = dataArray.get(i).getAsJsonObject();
+
+                JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+
+                JsonObject artwork = attributes.get("artwork").getAsJsonObject();
+
+                String artworkUrl = "";
+
+                //checking whether the json field exists. If not, an error string is inserted
+                if (this.checkNode(artwork, "url")) {
+                    artworkUrl = artwork.get("url").getAsString();
+                } else {
+                    artworkUrl = "NOT FOUND";
+                }
+
+                String albumName = "";
+                if (this.checkNode(attributes, "name")) {
+                    albumName = attributes.get("name").getAsString();
+                } else {
+                    albumName = "NOT FOUND";
+                }
+
+                String artistName = "";
+                if (this.checkNode(attributes, "artistName")) {
+                    artistName = attributes.get("artistName").getAsString();
+                } else {
+                    artistName = "NOT FOUND";
+                }
+
+                String url = "";
+                if (this.checkNode(attributes, "url")) {
+                    url = attributes.get("url").getAsString();
+                } else {
+                    url = "NOT FOUND";
+                }
+
+                int trackCount = 0;
+                if (this.checkNode(attributes, "trackCount")) {
+                    trackCount = attributes.get("trackCount").getAsInt();
+                }
+
+                String releaseDate = "";
+                if (this.checkNode(attributes, "releaseDate")) {
+                    releaseDate = attributes.get("releaseDate").getAsString();
+                } else {
+                    releaseDate = "NOT FOUND";
+                }
+
+                String recordLabel = "";
+                if (this.checkNode(attributes, "recordLabel")) {
+                    recordLabel = attributes.get("recordLabel").getAsString();
+                } else {
+                    recordLabel = "NOT FOUND";
+                }
+
+                String copyright = "";
+                if (this.checkNode(attributes, "copyright")) {
+                    copyright = attributes.get("copyright").getAsString();
+                } else {
+                    copyright = "NOT FOUND";
+                }
+
+                //we append all the info retrieved and thus build the chart
+                result.append(position + "; ")
+                        .append(albumName)
+                        .append("; ")
+                        .append(artistName)
+                        .append("; ")
+                        .append(url)
+                        .append("; ")
+                        .append(trackCount)
+                        .append("; ")
+                        .append(releaseDate)
+                        .append("; ")
+                        .append(recordLabel)
+                        .append("; ")
+                        .append(copyright)
+                        .append("; ")
+                        .append(artworkUrl)
+                        .append("\n");
+
+                //incrementing the album position
+                position++;
             }
+            //after going through all the first page array elements we pass
+            //another link containing the second page results. This up to the 6th page.
+            StringBuilder next = new StringBuilder("https://api.music.apple.com");
+            next.append(this.nextLink);
 
-            String artistName = "";
-            if(this.checkNode(attributes, "artistName")){
-                 artistName = attributes.get("artistName").getAsString();
-            } else {
-                 artistName = "NOT FOUND";
-            }
-
-
-            String url = "";
-            if(this.checkNode(attributes, "url")){
-                 url = attributes.get("url").getAsString();
-            } else {
-                 url = "NOT FOUND";
-            }
-
-
-            int trackCount = 0;
-            if(this.checkNode(attributes, "trackCount")){
-                trackCount = attributes.get("trackCount").getAsInt();
-            }
-
-            String releaseDate = "";
-            if(this.checkNode(attributes, "releaseDate")){
-                 releaseDate = attributes.get("releaseDate").getAsString();
-            } else {
-                 releaseDate = "NOT FOUND";
-            }
-
-
-            String recordLabel = "";
-            if(this.checkNode(attributes, "recordLabel")){
-                 recordLabel = attributes.get("recordLabel").getAsString();
-            } else {
-                 recordLabel = "NOT FOUND";
-            }
-
-
-            String copyright = "";
-            if(this.checkNode(attributes, "copyright")){
-                 copyright = attributes.get("copyright").getAsString();
-            } else {
-                 copyright = "NOT FOUND";
-            }
-
-
-            result.append(i+1+"; ")
-                    .append(albumName)
-                    .append("; ")
-                    .append(artistName)
-                    .append("; ")
-                    .append(url)
-                    .append("; ")
-                    .append(trackCount)
-                    .append("; ")
-                    .append(releaseDate)
-                    .append("; ")
-                    .append(recordLabel)
-                    .append("; ")
-                    .append(copyright)
-                    .append("; ")
-                    .append(artworkUrl)
-                    .append("\n");
-
+            link = next.toString();
 
         }
+
         this.chartsTextArea.setText(result.toString());
 
     }
 
+    /**
+     * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>JsonQueryUtils</code>class.
+     * @param gson the json object retrieved
+     * @param key the key against which the check is made
+     * @return Boolean
+     */
     @FXML
     private Boolean checkNode(JsonObject gson, String key){
-
         return gson.has(key);
-
     }
 
-    @FXML
-    public void locateFile(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        this.sourceFolderPath = fileChooser.showOpenDialog(new Stage());
-
-        if(this.sourceFolderPath != null){
-            this.sourceLabel.setText(this.sourceFolderPath.getAbsolutePath().toString());
-        }
-
-    }
-
+    /**
+     * This method displays the name and the version number of the program,
+     * when the About item menu is clicked.
+     */
     @FXML
     public void aboutItemAction() {
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("AMCharts v1.0");
         alert.setHeaderText("AMCharts v1.0\n");
         alert.showAndWait();
-
     }
 
 }
