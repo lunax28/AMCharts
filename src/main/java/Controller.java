@@ -185,6 +185,11 @@ public class Controller {
                     artworkUrl = "NOT FOUND";
                 }
 
+                //replacing {w} and {h} with the respective width and height
+                Integer width = artwork.get("width").getAsInt();
+                String coverUrl = artworkUrl.replaceAll("\\{w\\}", width.toString()).replaceAll("\\{h\\}", width.toString());
+                System.out.println("COVER URL: " + coverUrl);
+
                 String albumName = "";
                 if (this.checkNode(attributes, "name")) {
                     albumName = attributes.get("name").getAsString();
@@ -248,7 +253,7 @@ public class Controller {
                         .append("; ")
                         .append(copyright)
                         .append("; ")
-                        .append(artworkUrl)
+                        .append(coverUrl)
                         .append("\n");
 
                 //incrementing the album position
