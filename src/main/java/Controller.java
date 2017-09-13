@@ -295,4 +295,14 @@ public class Controller {
         alert.showAndWait();
     }
 
+    /**
+     * This method clears the text area.
+     */
+    @FXML
+    public void resetAction(){
+
+        this.chartsTextArea.clear();
+
+    }
+
 }

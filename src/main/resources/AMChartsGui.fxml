@@ -31,15 +31,20 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <ChoiceBox fx:id="countryChoiceBox" layoutX="105.0" layoutY="59.0" prefHeight="27.0" prefWidth="75.0" />
-        <ChoiceBox fx:id="genreChoiceBox" layoutX="270.0" layoutY="59.0" prefHeight="27.0" prefWidth="163.0" />
-        <Button fx:id="getButton" layoutX="526.0" layoutY="59.0" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="75.0" text="GET">
+        <ChoiceBox fx:id="countryChoiceBox" layoutX="95.0" layoutY="59.0" prefHeight="27.0" prefWidth="75.0" />
+        <ChoiceBox fx:id="genreChoiceBox" layoutX="248.0" layoutY="59.0" prefHeight="27.0" prefWidth="163.0" />
+        <Button fx:id="getButton" layoutX="448.0" layoutY="59.0" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="75.0" text="GET">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Button>
         <Label layoutX="33.0" layoutY="64.0" text="Country:" />
-        <Label layoutX="212.0" layoutY="64.0" text="Genre:" />
+        <Label layoutX="194.0" layoutY="64.0" text="Genre:" />
         <TextArea fx:id="chartsTextArea" layoutX="33.0" layoutY="114.0" prefHeight="246.0" prefWidth="572.0" promptText="The top chart will show up here:" />
+      <Button layoutX="552.0" layoutY="60.0" mnemonicParsing="false" onAction="#resetAction" prefHeight="27.0" prefWidth="53.0" text="RESET">
+         <font>
+            <Font name="System Bold" size="10.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
