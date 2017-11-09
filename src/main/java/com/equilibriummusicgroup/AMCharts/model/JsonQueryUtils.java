@@ -1,3 +1,5 @@
+package com.equilibriummusicgroup.AMCharts.model;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.jsonwebtoken.JwtBuilder;

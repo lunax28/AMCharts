@@ -1,7 +1,9 @@
+import com.equilibriummusicgroup.AMCharts.model.ChartsModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -15,7 +17,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    Stage window;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,15 +24,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        window = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AMChartsGui.fxml"));
-        window.setTitle("Apple Music Charts");
-        window.setScene(new Scene(root, 640, 382));
-        window.setResizable(false);
-        window.show();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AlbumChartsGui.fxml")) ;
+
+            BorderPane root = (BorderPane)loader.load();
+            AlbumChartsController controller = loader.getController();
+            ChartsModel chartsModel = new ChartsModel();
+            controller.setModel(chartsModel) ;
+
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public Stage getWindow() {
-        return window;
-    }
 }

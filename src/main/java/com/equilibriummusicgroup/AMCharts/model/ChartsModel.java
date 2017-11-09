@@ -1,133 +1,22 @@
+package com.equilibriummusicgroup.AMCharts.model;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import java.io.File;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.HashMap;
-import java.util.Map;
 
-/**
- * The Controller used by JavaFX to generate a GUI application
- */
+public class ChartsModel {
 
-public class Controller {
-
+    private JsonQueryUtils jsonQueryUtils = new JsonQueryUtils();
     private String nextLink;
 
-    @FXML
-    private TextArea chartsTextArea;
-
-    @FXML
-    private JsonQueryUtils apiQuery;
-
-    @FXML
-    private File sourceFolderPath;
-
-    @FXML
-    private ChoiceBox<String> countryChoiceBox;
-
-    @FXML
-    private ObservableList<String> countryObsList = FXCollections.observableArrayList("us","es","de","it","pt");
-
-    @FXML
-    private ChoiceBox<String> genreChoiceBox;
-
-    @FXML
-    private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
-            "Ambient",
-            "Blues",
-            "Children’s Music",
-            "Classical",
-            "Country",
-            "Dance",
-            "Easy Listening",
-            "Electronic",
-            "Environmental",
-            "Fitness & Workout",
-            "Healing",
-            "Holiday",
-            "Instrumental",
-            "Jazz",
-            "Latino",
-            "Lounge",
-            "Meditation",
-            "Nature",
-            "New Age",
-            "Relaxation",
-            "Soundtrack",
-            "Travel",
-            "World");
-
-    @FXML
-    private Map<String, Integer> genreMap;
-
-
-
-    public Controller(){
-        this.apiQuery  = new JsonQueryUtils();
-        genreMap = new HashMap<>();
+    public ChartsModel() {
     }
 
 
-    @FXML
-    private void initialize(){
-
-        this.countryChoiceBox.setValue("us");
-        this.genreChoiceBox.setValue("New Age");
-        this.countryChoiceBox.setItems(this.countryObsList);
-        this.genreChoiceBox.setItems(this.genreObsList);
-        genreMap.put("Alternative",20);
-        genreMap.put("Ambient", 1056);
-        genreMap.put("Blues",2);
-        genreMap.put("Children’s Music",4);
-        genreMap.put("Classical",5);
-        genreMap.put("Country",6);
-        genreMap.put("Dance",17);
-        genreMap.put("Easy Listening",25);
-        genreMap.put("Electronic",7);
-        genreMap.put("Environmental",1125);
-        genreMap.put("Fitness & Workout",50);
-        genreMap.put("Healing",1126);
-        genreMap.put("Holiday",8);
-        genreMap.put("Instrumental",53);
-        genreMap.put("Jazz",11);
-        genreMap.put("Latino",12);
-        genreMap.put("Lounge",1054);
-        genreMap.put("Meditation",1127);
-        genreMap.put("Nature",1128);
-        genreMap.put("New Age",13);
-        genreMap.put("Relaxation",1129);
-        genreMap.put("Soundtrack",16);
-        genreMap.put("Travel", 1130);
-        genreMap.put("World",19);
-    }
-
-    @FXML
-    public void getButtonAction() throws InvalidKeySpecException, NoSuchAlgorithmException {
-
-        StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
-
-        link.append(this.countryChoiceBox.getValue());
-        link.append("/charts?types=albums&genre=");
-        link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
-        link.append("&limit=50");
-
-        System.out.println("LINK IS: " + link.toString());
-
-        this.getCharts(link.toString());
-
-    }
-
-    /**
-     * This method is used to parse the <code>jsonResponse</code> from the <code>JsonQueryUtils</code>class.
-     * @param link This is the first paramter to addNum method
-     * @return void
-     */
-    private void getCharts(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public StringBuilder getAlbumCharts(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
@@ -142,7 +31,7 @@ public class Controller {
         //for loop to retrieve 6 pages of charts. Look at the AM API doc
         for(int x = 0; x < loopLimit; x++) {
 
-            JsonObject jsonResponse = apiQuery.getJson(link);
+            JsonObject jsonResponse = jsonQueryUtils.getJson(link);
 
             System.out.println("JSON RESPONSE: " + jsonResponse.toString());
 
@@ -265,41 +154,17 @@ public class Controller {
 
         }
 
-        this.chartsTextArea.setText(result.toString());
-
+        return result;
     }
 
+
     /**
-     * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>JsonQueryUtils</code>class.
+     * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>com.equilibriummusicgroup.AMCharts.model.JsonQueryUtils</code>class.
      * @param gson the json object retrieved
      * @param key the key against which the check is made
      * @return Boolean
      */
-    @FXML
     private Boolean checkNode(JsonObject gson, String key){
         return gson.has(key);
     }
-
-    /**
-     * This method displays the name and the version number of the program,
-     * when the About item menu is clicked.
-     */
-    @FXML
-    public void aboutItemAction() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("AMCharts v1.0");
-        alert.setHeaderText("AMCharts v1.0\n");
-        alert.showAndWait();
-    }
-
-    /**
-     * This method clears the text area.
-     */
-    @FXML
-    public void resetAction(){
-
-        this.chartsTextArea.clear();
-
-    }
-
 }
