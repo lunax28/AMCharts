@@ -37,30 +37,30 @@ public class Controller {
     private ChoiceBox<String> genreChoiceBox;
 
     @FXML
-    private ObservableList<String> genreObsList = FXCollections.observableArrayList("Blues",
+    private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
+            "Ambient",
+            "Blues",
             "Children’s Music",
             "Classical",
             "Country",
+            "Dance",
+            "Easy Listening",
             "Electronic",
+            "Environmental",
+            "Fitness & Workout",
+            "Healing",
             "Holiday",
+            "Instrumental",
             "Jazz",
             "Latino",
-            "New Age",
-            "Soundtrack",
-            "Dance",
-            "World",
-            "Alternative",
-            "Easy Listening",
-            "Fitness & Workout",
-            "Instrumental",
-            "Environmental",
-            "Healing",
+            "Lounge",
             "Meditation",
             "Nature",
+            "New Age",
             "Relaxation",
+            "Soundtrack",
             "Travel",
-            "Ambient",
-            "Lounge");
+            "World");
 
     @FXML
     private Map<String, Integer> genreMap;
@@ -80,33 +80,30 @@ public class Controller {
         this.genreChoiceBox.setValue("New Age");
         this.countryChoiceBox.setItems(this.countryObsList);
         this.genreChoiceBox.setItems(this.genreObsList);
+        genreMap.put("Alternative",20);
+        genreMap.put("Ambient", 1056);
         genreMap.put("Blues",2);
         genreMap.put("Children’s Music",4);
         genreMap.put("Classical",5);
         genreMap.put("Country",6);
-        genreMap.put("Electronic",7);
-        genreMap.put("Holiday",8);
-        genreMap.put("Jazz",11);
-        genreMap.put("New Age",13);
-        genreMap.put("Soundtrack",16);
         genreMap.put("Dance",17);
-        genreMap.put("World",19);
-        genreMap.put("Alternative",20);
         genreMap.put("Easy Listening",25);
-        genreMap.put("Fitness & Workout",50);
+        genreMap.put("Electronic",7);
         genreMap.put("Environmental",1125);
+        genreMap.put("Fitness & Workout",50);
         genreMap.put("Healing",1126);
+        genreMap.put("Holiday",8);
+        genreMap.put("Instrumental",53);
+        genreMap.put("Jazz",11);
+        genreMap.put("Latino",12);
+        genreMap.put("Lounge",1054);
         genreMap.put("Meditation",1127);
         genreMap.put("Nature",1128);
+        genreMap.put("New Age",13);
         genreMap.put("Relaxation",1129);
-        genreMap.put("Ambient",1056);
-        genreMap.put("Lounge",1054);
-        genreMap.put("Instrumental",53);
+        genreMap.put("Soundtrack",16);
         genreMap.put("Travel", 1130);
-        genreMap.put("Latino",12);
-        genreMap.put("Ambient", 1056);
-        genreMap.put("Lounge", 1054);
-
+        genreMap.put("World",19);
     }
 
     @FXML
