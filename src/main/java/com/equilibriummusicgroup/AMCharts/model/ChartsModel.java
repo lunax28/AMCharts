@@ -157,6 +157,50 @@ public class ChartsModel {
         return result;
     }
 
+    public StringBuilder getSongsCharts(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        //a StringBuilder object to store the list of albums
+        StringBuilder result = new StringBuilder();
+
+        JsonObject jsonResponse = jsonQueryUtils.getJson(link);
+
+        System.out.println("JSON RESPONSE: " + jsonResponse.toString());
+
+        JsonObject results = jsonResponse.get("results").getAsJsonObject();
+
+        JsonArray songs = results.get("songs").getAsJsonArray();
+
+        JsonObject data = songs.get(0).getAsJsonObject();
+
+        JsonArray dataArray = data.get("data").getAsJsonArray();
+
+        int sizeDataArray = dataArray.size();
+        System.out.println("size data array: " + sizeDataArray);
+
+        //after reaching the correct field we loop over each album to retrieve the info
+        for (int i = 0; i < sizeDataArray; i++) {
+
+            JsonObject firstResult = dataArray.get(i).getAsJsonObject();
+
+            JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+
+            String songArtist = attributes.get("name").getAsString();
+
+            result.append(songArtist)
+                    .append("\n");
+
+
+
+
+
+        }
+
+
+
+
+        return result;
+    }
+
 
     /**
      * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>com.equilibriummusicgroup.AMCharts.model.JsonQueryUtils</code>class.
@@ -167,4 +211,6 @@ public class ChartsModel {
     private Boolean checkNode(JsonObject gson, String key){
         return gson.has(key);
     }
+
+
 }

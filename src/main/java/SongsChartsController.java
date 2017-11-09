@@ -4,9 +4,15 @@
 
 import java.io.IOException;
 import java.net.URL;
-        import java.util.ResourceBundle;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import com.equilibriummusicgroup.AMCharts.model.ChartsModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,10 +37,10 @@ public class SongsChartsController {
     private URL location;
 
     @FXML // fx:id="countryChoiceBox"
-    private ChoiceBox<?> countryChoiceBox; // Value injected by FXMLLoader
+    private ChoiceBox<String> countryChoiceBox; // Value injected by FXMLLoader
 
     @FXML // fx:id="genreChoiceBox"
-    private ChoiceBox<?> genreChoiceBox; // Value injected by FXMLLoader
+    private ChoiceBox<String> genreChoiceBox; // Value injected by FXMLLoader
 
     @FXML // fx:id="getButton"
     private Button getButton; // Value injected by FXMLLoader
@@ -55,7 +61,122 @@ public class SongsChartsController {
     private Button changeSceneButton; // Value injected by FXMLLoader
 
     @FXML
+    private Map<String, Integer> genreMap;
+
+    @FXML
+    private ObservableList<String> countryObsList = FXCollections.observableArrayList("us","es","de","it","pt");
+
+    @FXML
+    private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
+            "Ambient",
+            "Blues",
+            "Children’s Music",
+            "Classical",
+            "Country",
+            "Dance",
+            "Easy Listening",
+            "Electronic",
+            "Environmental",
+            "Fitness & Workout",
+            "Healing",
+            "Holiday",
+            "Instrumental",
+            "Jazz",
+            "Latino",
+            "Lounge",
+            "Meditation",
+            "Nature",
+            "New Age",
+            "Relaxation",
+            "Soundtrack",
+            "Travel",
+            "World");
+
+    public SongsChartsController(){
+        genreMap = new HashMap<>();
+    }
+
+
+    private String linkBuilder() {
+        //https://api.music.apple.com/v1/catalog/it/charts?types=songs&genre=13&limit=10"
+
+        StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
+
+        link.append(this.countryChoiceBox.getValue());
+        link.append("/charts?types=songs&genre=");
+        link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
+        link.append("&limit=50");
+
+        System.out.println("LINK IS: " + link.toString());
+        return link.toString();
+    }
+
+
+
+    @FXML
+    void getButtonAction(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        StringBuilder result = new StringBuilder();
+
+        this.albumsTextArea.clear();
+
+        String link = linkBuilder();
+
+        result = chartsModel.getSongsCharts(link);
+
+        this.albumsTextArea.setText(result.toString());
+
+    }
+
+    @FXML
+    void resetAction(ActionEvent event) {
+
+    }
+
+    @FXML
     void aboutItemAction(ActionEvent event) {
+
+    }
+
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize() {
+        assert countryChoiceBox != null : "fx:id=\"countryChoiceBox\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert genreChoiceBox != null : "fx:id=\"genreChoiceBox\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert getButton != null : "fx:id=\"getButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert resetButton != null : "fx:id=\"resetButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert albumsTextArea != null : "fx:id=\"albumsTextArea\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert statusLabel != null : "fx:id=\"statusLabel\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert changeSceneButton != null : "fx:id=\"changeSceneButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+
+        this.countryChoiceBox.setValue("us");
+        this.genreChoiceBox.setValue("New Age");
+        this.countryChoiceBox.setItems(this.countryObsList);
+        this.genreChoiceBox.setItems(this.genreObsList);
+        genreMap.put("Alternative",20);
+        genreMap.put("Ambient", 1056);
+        genreMap.put("Blues",2);
+        genreMap.put("Children’s Music",4);
+        genreMap.put("Classical",5);
+        genreMap.put("Country",6);
+        genreMap.put("Dance",17);
+        genreMap.put("Easy Listening",25);
+        genreMap.put("Electronic",7);
+        genreMap.put("Environmental",1125);
+        genreMap.put("Fitness & Workout",50);
+        genreMap.put("Healing",1126);
+        genreMap.put("Holiday",8);
+        genreMap.put("Instrumental",53);
+        genreMap.put("Jazz",11);
+        genreMap.put("Latino",12);
+        genreMap.put("Lounge",1054);
+        genreMap.put("Meditation",1127);
+        genreMap.put("Nature",1128);
+        genreMap.put("New Age",13);
+        genreMap.put("Relaxation",1129);
+        genreMap.put("Soundtrack",16);
+        genreMap.put("Travel", 1130);
+        genreMap.put("World",19);
 
     }
 
@@ -72,29 +193,6 @@ public class SongsChartsController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
-    }
-
-    @FXML
-    void getButtonAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void resetAction(ActionEvent event) {
-
-    }
-
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
-        assert countryChoiceBox != null : "fx:id=\"countryChoiceBox\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert genreChoiceBox != null : "fx:id=\"genreChoiceBox\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert getButton != null : "fx:id=\"getButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert resetButton != null : "fx:id=\"resetButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert albumsTextArea != null : "fx:id=\"albumsTextArea\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert statusLabel != null : "fx:id=\"statusLabel\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
-        assert changeSceneButton != null : "fx:id=\"changeSceneButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
 
     }
 
