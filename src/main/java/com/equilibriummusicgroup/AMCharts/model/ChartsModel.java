@@ -162,41 +162,109 @@ public class ChartsModel {
         //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
 
-        JsonObject jsonResponse = jsonQueryUtils.getJson(link);
+        //this variable limits the search for additional pages if the "next" field
+        //is absent. Otherwise it is set to 6.
+        int loopLimit = 1;
 
-        System.out.println("JSON RESPONSE: " + jsonResponse.toString());
+        //for loop to retrieve 6 pages of charts. Look at the AM API doc
+        for(int x = 0; x < loopLimit; x++) {
 
-        JsonObject results = jsonResponse.get("results").getAsJsonObject();
+            JsonObject jsonResponse = jsonQueryUtils.getJson(link);
 
-        JsonArray songs = results.get("songs").getAsJsonArray();
+            System.out.println("JSON RESPONSE: " + jsonResponse.toString());
 
-        JsonObject data = songs.get(0).getAsJsonObject();
+            JsonObject results = jsonResponse.get("results").getAsJsonObject();
 
-        JsonArray dataArray = data.get("data").getAsJsonArray();
+            JsonArray songs = results.get("songs").getAsJsonArray();
 
-        int sizeDataArray = dataArray.size();
-        System.out.println("size data array: " + sizeDataArray);
+            JsonObject beforeData = songs.get(0).getAsJsonObject();
 
-        //after reaching the correct field we loop over each album to retrieve the info
-        for (int i = 0; i < sizeDataArray; i++) {
+            if (this.checkNode(beforeData, "next")) {
+                loopLimit = 50;
+                this.nextLink = beforeData.get("next").getAsString();
+            }
 
-            JsonObject firstResult = dataArray.get(i).getAsJsonObject();
+            JsonArray dataArray = beforeData.get("data").getAsJsonArray();
 
-            JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+            int sizeDataArray = dataArray.size();
+            System.out.println("size data array: " + sizeDataArray);
 
-            String songArtist = attributes.get("name").getAsString();
+            //after reaching the correct field we loop over each album to retrieve the info
+            for (int i = 0; i < sizeDataArray; i++) {
 
-            result.append(songArtist)
-                    .append("\n");
+                JsonObject firstResult = dataArray.get(i).getAsJsonObject();
+
+                String id = "";
+                if (this.checkNode(firstResult, "id")) {
+                    id = firstResult.get("id").getAsString();
+                } else {
+                    id = "NOT FOUND";
+                }
+
+                JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+
+                String isrc = "";
+                if (this.checkNode(attributes, "isrc")) {
+                    isrc = attributes.get("isrc").getAsString();
+                } else {
+                    isrc = "NOT FOUND";
+                }
+
+                if (isrc.substring(0, 3).equals("ito") || isrc.substring(0, 3).equals("ITO")) {
+                    continue;
+                }
+
+                String artistName = "";
+                if (this.checkNode(attributes, "artistName")) {
+                    artistName = attributes.get("artistName").getAsString();
+                } else {
+                    artistName = "NOT FOUND";
+                }
 
 
+                String url = "";
+                if (this.checkNode(attributes, "url")) {
+                    url = attributes.get("url").getAsString();
+                } else {
+                    url = "NOT FOUND";
+                }
 
+                String relDate = "";
+                if (this.checkNode(attributes, "releaseDate")) {
+                    relDate = attributes.get("releaseDate").getAsString();
+                } else {
+                    relDate = "NOT FOUND";
+                }
 
+                String songName = "";
+                if (this.checkNode(attributes, "name")) {
+                    songName = attributes.get("name").getAsString();
+                } else {
+                    songName = "NOT FOUND";
+                }
 
+                result.append(id)
+                        .append("; ")
+                        .append(songName)
+                        .append("; ")
+                        .append(relDate)
+                        .append("; ")
+                        .append(isrc)
+                        .append("; ")
+                        .append(artistName)
+                        .append("; ")
+                        .append(url)
+                        .append("\n");
+
+            }
+
+            //after going through all the first page array elements we pass
+            //another link containing the second page results. This up to the 6th page.
+            StringBuilder next = new StringBuilder("https://api.music.apple.com");
+            next.append(this.nextLink);
+
+            link = next.toString();
         }
-
-
-
 
         return result;
     }

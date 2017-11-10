@@ -18,11 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-        import javafx.scene.control.ChoiceBox;
-        import javafx.scene.control.Label;
-        import javafx.scene.control.ProgressBar;
-        import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class SongsChartsController {
@@ -64,7 +60,7 @@ public class SongsChartsController {
     private Map<String, Integer> genreMap;
 
     @FXML
-    private ObservableList<String> countryObsList = FXCollections.observableArrayList("us","es","de","it","pt");
+    private ObservableList<String> countryObsList = FXCollections.observableArrayList("de","es","fr","it","jp","pt","us");
 
     @FXML
     private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
@@ -92,6 +88,9 @@ public class SongsChartsController {
             "Travel",
             "World");
 
+    @FXML // fx:id="limitTextField"
+    private TextField limitTextField; // Value injected by FXMLLoader
+
     public SongsChartsController(){
         genreMap = new HashMap<>();
     }
@@ -105,8 +104,36 @@ public class SongsChartsController {
         link.append(this.countryChoiceBox.getValue());
         link.append("/charts?types=songs&genre=");
         link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
-        link.append("&limit=50");
+        link.append("&limit=");
 
+        int limit = 1;
+        if(limitTextField.getText().isEmpty()){
+            displayErrorMessage("Enter a limit for the number of songs retrieved!");
+            return null;
+        } else {
+            try{
+                limit = Integer.parseInt(limitTextField.getText());
+            } catch (NumberFormatException e){
+                e.printStackTrace();
+                displayErrorMessage("Limit is NOT an int!");
+                return null;
+            }
+        }
+
+
+        if(limit < 1 ){
+            displayErrorMessage("The limit is below the minimum!");
+            return null;
+
+        }
+
+        if(limit > 100 ){
+            displayErrorMessage("Limit may bee too high! ");
+            return null;
+
+        }
+
+        link.append(limitTextField.getText());
         System.out.println("LINK IS: " + link.toString());
         return link.toString();
     }
@@ -122,6 +149,10 @@ public class SongsChartsController {
 
         String link = linkBuilder();
 
+        if(link == null){
+            return;
+        }
+
         result = chartsModel.getSongsCharts(link);
 
         this.albumsTextArea.setText(result.toString());
@@ -130,6 +161,7 @@ public class SongsChartsController {
 
     @FXML
     void resetAction(ActionEvent event) {
+        this.albumsTextArea.clear();
 
     }
 
@@ -148,6 +180,7 @@ public class SongsChartsController {
         assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
         assert statusLabel != null : "fx:id=\"statusLabel\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
         assert changeSceneButton != null : "fx:id=\"changeSceneButton\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
+        assert limitTextField != null : "fx:id=\"limitTextField\" was not injected: check your FXML file 'SongsChartsGui.fxml'.";
 
         this.countryChoiceBox.setValue("us");
         this.genreChoiceBox.setValue("New Age");
@@ -193,6 +226,14 @@ public class SongsChartsController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    public void displayErrorMessage(String textMessage){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning!");
+        alert.setContentText(textMessage);
+        alert.showAndWait();
 
     }
 

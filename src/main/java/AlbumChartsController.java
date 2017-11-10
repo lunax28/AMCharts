@@ -52,7 +52,7 @@ public class AlbumChartsController {
     private Map<String, Integer> genreMap;
 
     @FXML
-    private ObservableList<String> countryObsList = FXCollections.observableArrayList("us","es","de","it","pt");
+    private ObservableList<String> countryObsList = FXCollections.observableArrayList("de","es","fr","it","jp","pt","us");
 
     @FXML
     private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
