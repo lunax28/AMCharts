@@ -104,9 +104,9 @@ public class SongsChartsController {
         link.append(this.countryChoiceBox.getValue());
         link.append("/charts?types=songs&genre=");
         link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
-        link.append("&limit=");
+        link.append("&limit=50");
 
-        int limit = 1;
+/*        int limit = 1;
         if(limitTextField.getText().isEmpty()){
             displayErrorMessage("Enter a limit for the number of songs retrieved!");
             return null;
@@ -133,7 +133,7 @@ public class SongsChartsController {
 
         }
 
-        link.append(limitTextField.getText());
+        link.append(limitTextField.getText());*/
         System.out.println("LINK IS: " + link.toString());
         return link.toString();
     }

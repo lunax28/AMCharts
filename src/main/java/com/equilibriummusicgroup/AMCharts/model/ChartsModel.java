@@ -164,12 +164,27 @@ public class ChartsModel {
 
         //this variable limits the search for additional pages if the "next" field
         //is absent. Otherwise it is set to 6.
-        int loopLimit = 1;
+        int loopLimit = 500;
+
+        int offset = 490;
+
+        String nextEndpoint = "";
+
+        JsonObject jsonResponse;
+        JsonObject beforeData;
 
         //for loop to retrieve 6 pages of charts. Look at the AM API doc
         for(int x = 0; x < loopLimit; x++) {
 
-            JsonObject jsonResponse = jsonQueryUtils.getJson(link);
+            //System.out.println("LINE 172 link: " + nextLink);
+            if(nextEndpoint.isEmpty()){
+                jsonResponse = jsonQueryUtils.getJson(link);
+
+            } else {
+                jsonResponse = jsonQueryUtils.getJson(nextLink);
+            }
+
+
 
             System.out.println("JSON RESPONSE: " + jsonResponse.toString());
 
@@ -177,14 +192,15 @@ public class ChartsModel {
 
             JsonArray songs = results.get("songs").getAsJsonArray();
 
-            JsonObject beforeData = songs.get(0).getAsJsonObject();
+            beforeData = songs.get(0).getAsJsonObject();
 
-            if (this.checkNode(beforeData, "next")) {
-                loopLimit = 50;
-                this.nextLink = beforeData.get("next").getAsString();
+            if (!this.checkNode(beforeData, "data")) {
+                System.out.println("NO DATA IN beforeData!!!!!!!!");
+                break;
             }
 
             JsonArray dataArray = beforeData.get("data").getAsJsonArray();
+
 
             int sizeDataArray = dataArray.size();
             System.out.println("size data array: " + sizeDataArray);
@@ -199,6 +215,11 @@ public class ChartsModel {
                     id = firstResult.get("id").getAsString();
                 } else {
                     id = "NOT FOUND";
+                }
+
+                if (!this.checkNode(firstResult, "attributes")) {
+                    System.out.println("NO ATTRIBUTES IN firstResult!!!!!!!!");
+                    continue;
                 }
 
                 JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
@@ -258,12 +279,29 @@ public class ChartsModel {
 
             }
 
-            //after going through all the first page array elements we pass
-            //another link containing the second page results. This up to the 6th page.
-            StringBuilder next = new StringBuilder("https://api.music.apple.com");
-            next.append(this.nextLink);
+            if (this.checkNode(beforeData, "next")) {
+                if(beforeData.get("next").getAsString().isEmpty()){
+                    System.out.println("ATTENTION! NEXT FIELD IS EMPTY");
+                    break;
+                }
+                nextEndpoint = beforeData.get("next").getAsString();
+                //after going through all the first page array elements we pass
+                //another link containing the second page results. This up to the 6th page.
+                StringBuilder next = new StringBuilder("https://api.music.apple.com");
+                next.append(nextEndpoint);
 
-            link = next.toString();
+                nextLink = next.toString();
+            } else {
+                offset = offset + 20;
+                nextEndpoint = "/v1/catalog/it/charts?chart=most-played&genre=13&offset=" + offset +"&types=songs";
+                StringBuilder next = new StringBuilder("https://api.music.apple.com");
+                next.append(nextEndpoint);
+                nextLink = next.toString();
+                System.out.println("ATTENTION!!! NO NEXT FIELD!");
+
+            }
+
+
         }
 
         return result;
