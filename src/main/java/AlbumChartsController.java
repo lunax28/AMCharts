@@ -89,6 +89,8 @@ public class AlbumChartsController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("AMCharts v1.0");
         alert.setHeaderText("AMCharts v1.0\n");
+        alert.setContentText("In the first screen you can retrieve the top albums by genre.\n" +
+                "In the second screen you can retrieve the top tracks by genre. In the LIMIT text field, you can type how many songs you are going to query.");
         alert.showAndWait();
     }
 

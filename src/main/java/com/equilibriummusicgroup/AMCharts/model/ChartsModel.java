@@ -157,7 +157,7 @@ public class ChartsModel {
         return result;
     }
 
-    public StringBuilder getSongsCharts(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public StringBuilder getSongsCharts(String link, int limit) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
@@ -174,7 +174,7 @@ public class ChartsModel {
         JsonObject beforeData;
 
         //for loop to retrieve 6 pages of charts. Look at the AM API doc
-        for(int x = 0; x < loopLimit; x++) {
+        for(int x = 0; x < limit; x++) {
 
             //System.out.println("LINE 172 link: " + nextLink);
             if(nextEndpoint.isEmpty()){
