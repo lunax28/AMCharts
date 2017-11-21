@@ -29,7 +29,7 @@ public class ChartsModel {
         int loopLimit = 1;
 
         //for loop to retrieve 6 pages of charts. Look at the AM API doc
-        for(int x = 0; x < loopLimit; x++) {
+        for (int x = 0; x < loopLimit; x++) {
 
             JsonObject jsonResponse = jsonQueryUtils.getJson(link);
 
@@ -157,14 +157,10 @@ public class ChartsModel {
         return result;
     }
 
-    public StringBuilder getSongsCharts(String link, int limit) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public StringBuilder getSongsCharts(String link, int limit, String countryValue, String genreValue) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
-
-        //this variable limits the search for additional pages if the "next" field
-        //is absent. Otherwise it is set to 6.
-        int loopLimit = 500;
 
         int offset = 490;
 
@@ -174,16 +170,15 @@ public class ChartsModel {
         JsonObject beforeData;
 
         //for loop to retrieve 6 pages of charts. Look at the AM API doc
-        for(int x = 0; x < limit; x++) {
+        for (int x = 0; x < limit; x++) {
 
             //System.out.println("LINE 172 link: " + nextLink);
-            if(nextEndpoint.isEmpty()){
+            if (nextEndpoint.isEmpty()) {
                 jsonResponse = jsonQueryUtils.getJson(link);
 
             } else {
                 jsonResponse = jsonQueryUtils.getJson(nextLink);
             }
-
 
 
             System.out.println("JSON RESPONSE: " + jsonResponse.toString());
@@ -231,8 +226,18 @@ public class ChartsModel {
                     isrc = "NOT FOUND";
                 }
 
-                if (isrc.substring(0, 3).equals("ito") || isrc.substring(0, 3).equals("ITO")) {
-                    continue;
+                if (isrc.substring(0, 3).equals("ITO")) {
+                    int isrcInt = 0;
+                    try {
+                        isrcInt = Integer.parseInt(isrc.substring(3, isrc.length()));
+                        System.out.println("LINE 238 isrcInt: " + isrcInt);
+                    } catch (NumberFormatException e) {
+                        continue;
+                    }
+
+                    if (isrcInt > 101100000 && isrcInt < 101900000) {
+                        continue;
+                    }
                 }
 
                 String artistName = "";
@@ -280,7 +285,7 @@ public class ChartsModel {
             }
 
             if (this.checkNode(beforeData, "next")) {
-                if(beforeData.get("next").getAsString().isEmpty()){
+                if (beforeData.get("next").getAsString().isEmpty()) {
                     System.out.println("ATTENTION! NEXT FIELD IS EMPTY");
                     break;
                 }
@@ -293,7 +298,7 @@ public class ChartsModel {
                 nextLink = next.toString();
             } else {
                 offset = offset + 20;
-                nextEndpoint = "/v1/catalog/it/charts?chart=most-played&genre=13&offset=" + offset +"&types=songs";
+                nextEndpoint = "/v1/catalog/" + countryValue + "/charts?chart=most-played&genre=" + genreValue + "&offset=" + offset + "&types=songs";
                 StringBuilder next = new StringBuilder("https://api.music.apple.com");
                 next.append(nextEndpoint);
                 nextLink = next.toString();
@@ -308,15 +313,176 @@ public class ChartsModel {
     }
 
 
-    /**
-     * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>com.equilibriummusicgroup.AMCharts.model.JsonQueryUtils</code>class.
-     * @param gson the json object retrieved
-     * @param key the key against which the check is made
-     * @return Boolean
-     */
-    private Boolean checkNode(JsonObject gson, String key){
-        return gson.has(key);
+    public StringBuilder getAllSongsCharts(String link, int limit, String countryValue, String genre) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        //a StringBuilder object to store the list of albums
+        StringBuilder result = new StringBuilder();
+
+        //this variable limits the search for additional pages if the "next" field
+        //is absent. Otherwise it is set to 6.
+        int loopLimit = 500;
+
+        int offset = 490;
+
+        String nextEndpoint = "";
+
+        JsonObject jsonResponse;
+        JsonObject beforeData;
+
+
+        for (int x = 0; x < limit; x++) {
+
+            //System.out.println("LINE 172 link: " + nextLink);
+            if (nextEndpoint.isEmpty()) {
+                jsonResponse = jsonQueryUtils.getJson(link);
+
+            } else {
+                jsonResponse = jsonQueryUtils.getJson(nextLink);
+            }
+
+
+            System.out.println("JSON RESPONSE: " + jsonResponse.toString());
+
+            JsonObject results = jsonResponse.get("results").getAsJsonObject();
+
+            JsonArray songs = results.get("songs").getAsJsonArray();
+
+            beforeData = songs.get(0).getAsJsonObject();
+
+            if (!this.checkNode(beforeData, "data")) {
+                System.out.println("NO DATA IN beforeData!!!!!!!!");
+                break;
+            }
+
+            JsonArray dataArray = beforeData.get("data").getAsJsonArray();
+
+
+            int sizeDataArray = dataArray.size();
+            System.out.println("size data array: " + sizeDataArray);
+
+            //after reaching the correct field we loop over each album to retrieve the info
+            for (int i = 0; i < sizeDataArray; i++) {
+
+                JsonObject firstResult = dataArray.get(i).getAsJsonObject();
+
+                String id = "";
+                if (this.checkNode(firstResult, "id")) {
+                    id = firstResult.get("id").getAsString();
+                } else {
+                    id = "NOT FOUND";
+                }
+
+                if (!this.checkNode(firstResult, "attributes")) {
+                    System.out.println("NO ATTRIBUTES IN firstResult!!!!!!!!");
+                    continue;
+                }
+
+                JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+
+                String isrc = "";
+                if (this.checkNode(attributes, "isrc")) {
+                    isrc = attributes.get("isrc").getAsString();
+                } else {
+                    isrc = "NOT FOUND";
+                }
+
+                if (isrc.substring(0, 3).equals("ITO")) {
+                    int isrcInt = 0;
+                    try {
+                        isrcInt = Integer.parseInt(isrc.substring(3, isrc.length()));
+                        System.out.println("LINE 238 isrcInt: " + isrcInt);
+                    } catch (NumberFormatException e) {
+                        continue;
+                    }
+
+                    if (isrcInt > 101100000 && isrcInt < 101900000) {
+                        continue;
+                    }
+                }
+
+                String artistName = "";
+                if (this.checkNode(attributes, "artistName")) {
+                    artistName = attributes.get("artistName").getAsString();
+                } else {
+                    artistName = "NOT FOUND";
+                }
+
+
+                String url = "";
+                if (this.checkNode(attributes, "url")) {
+                    url = attributes.get("url").getAsString();
+                } else {
+                    url = "NOT FOUND";
+                }
+
+                String relDate = "";
+                if (this.checkNode(attributes, "releaseDate")) {
+                    relDate = attributes.get("releaseDate").getAsString();
+                } else {
+                    relDate = "NOT FOUND";
+                }
+
+                String songName = "";
+                if (this.checkNode(attributes, "name")) {
+                    songName = attributes.get("name").getAsString();
+                } else {
+                    songName = "NOT FOUND";
+                }
+
+                result.append(genre)
+                        .append("; ")
+                        .append(id)
+                        .append("; ")
+                        .append(songName)
+                        .append("; ")
+                        .append(relDate)
+                        .append("; ")
+                        .append(isrc)
+                        .append("; ")
+                        .append(artistName)
+                        .append("; ")
+                        .append(url)
+                        .append("\n");
+
+            }
+
+            if (this.checkNode(beforeData, "next")) {
+                if (beforeData.get("next").getAsString().isEmpty()) {
+                    System.out.println("ATTENTION! NEXT FIELD IS EMPTY");
+                    break;
+                }
+                nextEndpoint = beforeData.get("next").getAsString();
+                //after going through all the first page array elements we pass
+                //another link containing the second page results. This up to the 6th page.
+                StringBuilder next = new StringBuilder("https://api.music.apple.com");
+                next.append(nextEndpoint);
+
+                nextLink = next.toString();
+            } else {
+                offset = offset + 20;
+                nextEndpoint = "/v1/catalog/" + countryValue + "/charts?chart=most-played&genre=" + genre + "&offset=" + offset + "&types=songs";
+                StringBuilder next = new StringBuilder("https://api.music.apple.com");
+                next.append(nextEndpoint);
+                nextLink = next.toString();
+                System.out.println("ATTENTION!!! NO NEXT FIELD!");
+
+            }
+
+
+        }
+
+        return result;
+
+
     }
 
-
+    /**
+     * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>com.equilibriummusicgroup.AMCharts.model.JsonQueryUtils</code>class.
+     *
+     * @param gson the json object retrieved
+     * @param key  the key against which the check is made
+     * @return Boolean
+     */
+    private Boolean checkNode(JsonObject gson, String key) {
+        return gson.has(key);
+    }
 }

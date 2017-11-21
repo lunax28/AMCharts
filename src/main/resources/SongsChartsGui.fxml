@@ -104,11 +104,16 @@
                   </Label>
                   <Button fx:id="getButton" defaultButton="true" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="69.0" text="GET">
                      <HBox.margin>
-                        <Insets left="55.0" />
+                        <Insets left="30.0" />
                      </HBox.margin>
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
+                  </Button>
+                  <Button fx:id="betaButton" mnemonicParsing="false" onAction="#doBetaButton" prefHeight="27.0" prefWidth="33.0" text="B">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
                   </Button>
                   <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetAction" text="reset">
                      <HBox.margin>
