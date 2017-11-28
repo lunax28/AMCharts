@@ -11,7 +11,10 @@ import com.equilibriummusicgroup.AMCharts.model.ChartsModel;
 import com.google.gson.JsonObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -113,15 +116,40 @@ public class AlbumChartsController {
     @FXML
     void getButtonAction(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-        StringBuilder result = new StringBuilder();
+
 
         this.albumsTextArea.clear();
 
         String link = linkBuilder();
 
-        result = chartsModel.getAlbumCharts(link);
+        Task<StringBuilder> task = new Task<StringBuilder>(){
 
-        this.albumsTextArea.setText(result.toString());
+            @Override
+            protected StringBuilder call() throws Exception {
+                updateProgress(-1, -1);
+                StringBuilder result = new StringBuilder();
+                result = chartsModel.getAlbumCharts(link);
+                updateProgress(1, 1);
+                return result;
+            }
+
+        };
+
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                StringBuilder result = task.getValue();
+                albumsTextArea.setText(result.toString());
+
+            }
+        });
+
+        this.progressBar.progressProperty().bind(task.progressProperty());
+
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
 
     }
 

@@ -89,20 +89,21 @@ public class SongsChartsController {
             "Travel",
             "World");
 
+    private StringBuilder allGenresResult;
+
     @FXML // fx:id="limitTextField"
     private TextField limitTextField; // Value injected by FXMLLoader
+
+
 
     public SongsChartsController() {
         genreMap = new HashMap<>();
     }
 
 
-    private StringBuilder allGenresResult;
 
 
     private String linkBuilder() {
-        //https://api.music.apple.com/v1/catalog/it/charts?types=songs&genre=13&limit=10"
-
         StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
 
         link.append(this.countryChoiceBox.getValue());
@@ -110,34 +111,6 @@ public class SongsChartsController {
         link.append(this.genreMap.get(this.genreChoiceBox.getValue()));
         link.append("&limit=50");
 
-/*        int limit = 1;
-        if(limitTextField.getText().isEmpty()){
-            displayErrorMessage("Enter a limit for the number of songs retrieved!");
-            return null;
-        } else {
-            try{
-                limit = Integer.parseInt(limitTextField.getText());
-            } catch (NumberFormatException e){
-                e.printStackTrace();
-                displayErrorMessage("Limit is NOT an int!");
-                return null;
-            }
-        }
-
-
-        if(limit < 1 ){
-            displayErrorMessage("The limit is below the minimum!");
-            return null;
-
-        }
-
-        if(limit > 100 ){
-            displayErrorMessage("Limit may bee too high! ");
-            return null;
-
-        }
-
-        link.append(limitTextField.getText());*/
         System.out.println("LINK IS: " + link.toString());
         return link.toString();
     }
