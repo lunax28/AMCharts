@@ -2,6 +2,7 @@ package com.equilibriummusicgroup.AMCharts.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.oracle.tools.packager.Log;
 import javafx.fxml.FXML;
 
 import java.security.NoSuchAlgorithmException;
@@ -181,7 +182,7 @@ public class ChartsModel {
             }
 
 
-            System.out.println("JSON RESPONSE: " + jsonResponse.toString());
+            System.out.println("ChartsModel JSON RESPONSE: " + jsonResponse.toString());
 
             JsonObject results = jsonResponse.get("results").getAsJsonObject();
 
@@ -198,7 +199,7 @@ public class ChartsModel {
 
 
             int sizeDataArray = dataArray.size();
-            System.out.println("size data array: " + sizeDataArray);
+            System.out.println("ChartsModel size data array: " + sizeDataArray);
 
             //after reaching the correct field we loop over each album to retrieve the info
             for (int i = 0; i < sizeDataArray; i++) {
@@ -213,7 +214,7 @@ public class ChartsModel {
                 }
 
                 if (!this.checkNode(firstResult, "attributes")) {
-                    System.out.println("NO ATTRIBUTES IN firstResult!!!!!!!!");
+                    System.out.println("ChartsModel NO ATTRIBUTES IN firstResult!!!!!!!!");
                     continue;
                 }
 
@@ -226,7 +227,7 @@ public class ChartsModel {
                     isrc = "NOT FOUND";
                 }
 
-                if (isrc.substring(0, 3).equals("ITO")) {
+/*                if (isrc.substring(0, 3).equals("ITO")) {
                     int isrcInt = 0;
                     try {
                         isrcInt = Integer.parseInt(isrc.substring(3, isrc.length()));
@@ -238,7 +239,7 @@ public class ChartsModel {
                     if (isrcInt > 101100000 && isrcInt < 101900000) {
                         continue;
                     }
-                }
+                }*/
 
                 String artistName = "";
                 if (this.checkNode(attributes, "artistName")) {
@@ -286,10 +287,12 @@ public class ChartsModel {
 
             if (this.checkNode(beforeData, "next")) {
                 if (beforeData.get("next").getAsString().isEmpty()) {
-                    System.out.println("ATTENTION! NEXT FIELD IS EMPTY");
+                    System.out.println("ChartsModel ATTENTION! NEXT FIELD IS EMPTY");
                     break;
                 }
+
                 nextEndpoint = beforeData.get("next").getAsString();
+                System.out.println("####ChartsModel nextEndpoint: " + nextEndpoint);
                 //after going through all the first page array elements we pass
                 //another link containing the second page results. This up to the 6th page.
                 StringBuilder next = new StringBuilder("https://api.music.apple.com");
@@ -302,7 +305,7 @@ public class ChartsModel {
                 StringBuilder next = new StringBuilder("https://api.music.apple.com");
                 next.append(nextEndpoint);
                 nextLink = next.toString();
-                System.out.println("ATTENTION!!! NO NEXT FIELD!");
+                System.out.println("ChartsModel ATTENTION!!! NO NEXT FIELD!");
 
             }
 
@@ -451,6 +454,7 @@ public class ChartsModel {
                     break;
                 }
                 nextEndpoint = beforeData.get("next").getAsString();
+                System.out.println("nextEndpoint line 454: " + nextEndpoint);
                 //after going through all the first page array elements we pass
                 //another link containing the second page results. This up to the 6th page.
                 StringBuilder next = new StringBuilder("https://api.music.apple.com");

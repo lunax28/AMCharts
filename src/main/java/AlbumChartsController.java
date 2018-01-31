@@ -116,8 +116,6 @@ public class AlbumChartsController {
     @FXML
     void getButtonAction(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-
-
         this.albumsTextArea.clear();
 
         String link = linkBuilder();

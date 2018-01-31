@@ -117,7 +117,7 @@ public class SongsChartsController {
 
 
     @FXML
-    void getButtonAction(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    void getSongsButton(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         String countryValue = this.countryChoiceBox.getValue();
 
@@ -147,7 +147,7 @@ public class SongsChartsController {
             return;
         }
 
-        result = chartsModel.getSongsCharts(link, loopLimit, countryValue,genreValue);
+        result = chartsModel.getSongsCharts(link, loopLimit, countryValue,this.genreMap.get(this.genreChoiceBox.getValue()).toString());
 
         this.albumsTextArea.setText(result.toString());
 

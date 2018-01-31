@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SongsChartsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SongsChartsController">
    <top>
       <VBox prefHeight="106.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -102,7 +102,7 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
-                  <Button fx:id="getButton" defaultButton="true" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="69.0" text="GET">
+                  <Button fx:id="getButton" defaultButton="true" mnemonicParsing="false" onAction="#getSongsButton" prefHeight="27.0" prefWidth="69.0" text="GET">
                      <HBox.margin>
                         <Insets left="30.0" />
                      </HBox.margin>

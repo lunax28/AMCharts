@@ -114,18 +114,17 @@ public class JsonQueryUtils {
             httpCon.setRequestProperty("Authorization", basicAuth);
             this.responseCode = httpCon.getResponseCode();
 
-            System.out.println("RESPONSE CODE LINE 94: " + this.responseCode);
+            System.out.println("RESPONSE CODE LINE 117: " + this.responseCode);
+            System.out.println("\nSending 'GET' request to URL : " + url);
+            System.out.println("Response Code : " + responseCode);
 
             if (this.responseCode != 200) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning!");
                 alert.setContentText("An error has occured. Rate limit probably reached");
                 alert.showAndWait();
-                return null;
+                //return null;
             }
-
-            System.out.println("\nSending 'GET' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
             String inputLine;
