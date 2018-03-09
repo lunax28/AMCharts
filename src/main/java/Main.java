@@ -14,7 +14,6 @@ import javafx.stage.Stage;
  * @version 1.0
  * @since   2017-09-07
  */
-
 public class Main extends Application {
 
 
@@ -25,21 +24,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AlbumChartsGui.fxml")) ;
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AlbumChartsGui.fxml"));
             BorderPane root = (BorderPane)loader.load();
             AlbumChartsController controller = loader.getController();
             ChartsModel chartsModel = new ChartsModel();
             controller.setModel(chartsModel) ;
-
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
-
 
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
-
 }

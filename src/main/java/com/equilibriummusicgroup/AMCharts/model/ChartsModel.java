@@ -1,10 +1,6 @@
 package com.equilibriummusicgroup.AMCharts.model;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.oracle.tools.packager.Log;
-import javafx.fxml.FXML;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -34,7 +30,7 @@ public class ChartsModel {
 
             JsonObject jsonResponse = jsonQueryUtils.getJson(link);
 
-            System.out.println("JSON RESPONSE: " + jsonResponse.toString());
+            System.out.println("Json Response in ChartsModel: " + jsonResponse.toString());
 
             JsonObject results = jsonResponse.get("results").getAsJsonObject();
 
@@ -59,7 +55,16 @@ public class ChartsModel {
 
                 JsonObject firstResult = dataArray.get(i).getAsJsonObject();
 
-                JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
+                JsonObject attributes;
+
+                //checking whether the json field exists. If not, an error string is inserted
+                if (this.checkNode(firstResult, "attributes")) {
+                    attributes = firstResult.get("attributes").getAsJsonObject();
+                } else {
+                    break;
+                }
+
+                //JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
 
                 JsonObject artwork = attributes.get("artwork").getAsJsonObject();
 
@@ -75,7 +80,7 @@ public class ChartsModel {
                 //replacing {w} and {h} with the respective width and height
                 Integer width = artwork.get("width").getAsInt();
                 String coverUrl = artworkUrl.replaceAll("\\{w\\}", width.toString()).replaceAll("\\{h\\}", width.toString());
-                System.out.println("COVER URL: " + coverUrl);
+                //System.out.println("COVER URL: " + coverUrl);
 
                 String albumName = "";
                 if (this.checkNode(attributes, "name")) {
@@ -152,6 +157,8 @@ public class ChartsModel {
             next.append(this.nextLink);
 
             link = next.toString();
+            System.out.println("NEXT LINK LINE 155: " + link);
+            System.out.println("###END OF PAGE###\n");
 
         }
 

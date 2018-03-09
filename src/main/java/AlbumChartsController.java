@@ -1,5 +1,5 @@
 /**
- * Sample Skeleton for 'AlbumChartsGui.fxml' Controller Class
+ * Controller Class
  */
 
 import java.io.IOException;
@@ -54,10 +54,10 @@ public class AlbumChartsController {
     @FXML
     private Map<String, Integer> genreMap;
 
-    @FXML
+    @FXML // ObservableList of ISO 3166-2 country codes
     private ObservableList<String> countryObsList = FXCollections.observableArrayList("de","es","fr","it","jp","pt","us");
 
-    @FXML
+    @FXML // ObservableList of iTunes genres
     private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
             "Ambient",
             "Blues",
@@ -83,18 +83,54 @@ public class AlbumChartsController {
             "Travel",
             "World");
 
-    /**
-     * This method displays the name and the version number of the program,
-     * when the About item menu is clicked.
-     */
-    @FXML
-    public void aboutItemAction() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("AMCharts v1.0");
-        alert.setHeaderText("AMCharts v1.0\n");
-        alert.setContentText("In the first screen you can retrieve the top albums by genre.\n" +
-                "In the second screen you can retrieve the top tracks by genre. In the LIMIT text field, you can type how many songs you are going to query.");
-        alert.showAndWait();
+    public AlbumChartsController(){
+        genreMap = new HashMap<>();
+    }
+
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize() {
+        assert countryChoiceBox != null : "fx:id=\"countryChoiceBox\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert genreChoiceBox != null : "fx:id=\"genreChoiceBox\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert getButton != null : "fx:id=\"getButton\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert resetButton != null : "fx:id=\"resetButton\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert albumsTextArea != null : "fx:id=\"albumsTextArea\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert statusLabel != null : "fx:id=\"statusLabel\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+        assert changeSceneButton != null : "fx:id=\"changeSceneButton\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
+
+        this.countryChoiceBox.setValue("us");
+        this.genreChoiceBox.setValue("New Age");
+        this.countryChoiceBox.setItems(this.countryObsList);
+        this.genreChoiceBox.setItems(this.genreObsList);
+        genreMap.put("Alternative",20);
+        genreMap.put("Ambient", 1056);
+        genreMap.put("Blues",2);
+        genreMap.put("Children’s Music",4);
+        genreMap.put("Classical",5);
+        genreMap.put("Country",6);
+        genreMap.put("Dance",17);
+        genreMap.put("Easy Listening",25);
+        genreMap.put("Electronic",7);
+        genreMap.put("Environmental",1125);
+        genreMap.put("Fitness & Workout",50);
+        genreMap.put("Healing",1126);
+        genreMap.put("Holiday",8);
+        genreMap.put("Instrumental",53);
+        genreMap.put("Jazz",11);
+        genreMap.put("Latino",12);
+        genreMap.put("Lounge",1054);
+        genreMap.put("Meditation",1127);
+        genreMap.put("Nature",1128);
+        genreMap.put("New Age",13);
+        genreMap.put("Relaxation",1129);
+        genreMap.put("Soundtrack",16);
+        genreMap.put("Travel", 1130);
+        genreMap.put("World",19);
+
+    }
+
+    public void setModel(ChartsModel model) {
+        this.chartsModel = model;
     }
 
     @FXML
@@ -176,56 +212,6 @@ public class AlbumChartsController {
 
     }
 
-    public AlbumChartsController(){
-        genreMap = new HashMap<>();
-    }
-
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
-        assert countryChoiceBox != null : "fx:id=\"countryChoiceBox\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert genreChoiceBox != null : "fx:id=\"genreChoiceBox\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert getButton != null : "fx:id=\"getButton\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert resetButton != null : "fx:id=\"resetButton\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert albumsTextArea != null : "fx:id=\"albumsTextArea\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert progressBar != null : "fx:id=\"progressBar\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert statusLabel != null : "fx:id=\"statusLabel\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-        assert changeSceneButton != null : "fx:id=\"changeSceneButton\" was not injected: check your FXML file 'AlbumChartsGui.fxml'.";
-
-        this.countryChoiceBox.setValue("us");
-        this.genreChoiceBox.setValue("New Age");
-        this.countryChoiceBox.setItems(this.countryObsList);
-        this.genreChoiceBox.setItems(this.genreObsList);
-        genreMap.put("Alternative",20);
-        genreMap.put("Ambient", 1056);
-        genreMap.put("Blues",2);
-        genreMap.put("Children’s Music",4);
-        genreMap.put("Classical",5);
-        genreMap.put("Country",6);
-        genreMap.put("Dance",17);
-        genreMap.put("Easy Listening",25);
-        genreMap.put("Electronic",7);
-        genreMap.put("Environmental",1125);
-        genreMap.put("Fitness & Workout",50);
-        genreMap.put("Healing",1126);
-        genreMap.put("Holiday",8);
-        genreMap.put("Instrumental",53);
-        genreMap.put("Jazz",11);
-        genreMap.put("Latino",12);
-        genreMap.put("Lounge",1054);
-        genreMap.put("Meditation",1127);
-        genreMap.put("Nature",1128);
-        genreMap.put("New Age",13);
-        genreMap.put("Relaxation",1129);
-        genreMap.put("Soundtrack",16);
-        genreMap.put("Travel", 1130);
-        genreMap.put("World",19);
-
-    }
-
-    public void setModel(ChartsModel model) {
-        this.chartsModel = model;
-    }
-
     /**
      * Helper method to check whether the json retrieved has the field passed as a parameter the <code>jsonResponse</code> from the <code>com.equilibriummusicgroup.AMCharts.model.JsonQueryUtils</code>class.
      * @param gson the json object retrieved
@@ -235,5 +221,19 @@ public class AlbumChartsController {
     @FXML
     private Boolean checkNode(JsonObject gson, String key){
         return gson.has(key);
+    }
+
+    /**
+     * This method displays the name and the version number of the program,
+     * when the About item menu is clicked.
+     */
+    @FXML
+    public void aboutItemAction() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("AMCharts v1.0");
+        alert.setHeaderText("AMCharts v1.0\n");
+        alert.setContentText("In the first screen you can retrieve the top albums by genre.\n" +
+                "In the second screen you can retrieve the top tracks by genre. In the LIMIT text field, you can type how many songs you are going to query.");
+        alert.showAndWait();
     }
 }

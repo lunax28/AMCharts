@@ -106,16 +106,17 @@ public class JsonQueryUtils {
 
             if(preferences.getLong("expiry",0) < System.currentTimeMillis() || preferences.get("builderString","") == null) {
                 basicAuth = "Bearer " + getToken();
+                System.out.println("###getToken()###");
             } else {
                 basicAuth = "Bearer " + preferences.get("builderString","");
+                System.out.println("Token retrieved from preferences");
             }
 
             httpCon.setRequestMethod("GET");
             httpCon.setRequestProperty("Authorization", basicAuth);
             this.responseCode = httpCon.getResponseCode();
 
-            System.out.println("RESPONSE CODE LINE 117: " + this.responseCode);
-            System.out.println("\nSending 'GET' request to URL : " + url);
+            System.out.println("Sending 'GET' request to URL : " + url);
             System.out.println("Response Code : " + responseCode);
 
             if (this.responseCode != 200) {
@@ -145,7 +146,7 @@ public class JsonQueryUtils {
         this.responseTrimmed = response.trim();
         this.jsonObject = new JsonParser().parse(responseTrimmed).getAsJsonObject();
 
-        System.out.println("jsonobj: " + this.jsonObject.toString());
+        System.out.println("jsonObject from JsonQueryUtils: " + this.jsonObject.toString());
 
         return this.jsonObject;
     }
