@@ -7,9 +7,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import javafx.scene.control.Alert;
 import org.apache.commons.codec.binary.Base64;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -43,7 +42,19 @@ public class JsonQueryUtils {
 
     private String getToken() throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        String secret = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg247w7fZYc27Dr/cBJc5laTJFwLJLgs9jQaSeUfVU1kygCgYIKoZIzj0DAQehRANCAATOLyYZpBnAweJPU/FG4j0oA/z/qLTS7OJ5P839h9Rtngfs564at6azXK7udrYsTkRVZcpCJ7H5P8cPELcF7uUQ";
+        JsonParser parser = new JsonParser();
+
+        String secret = null;
+
+        try {
+        JsonObject jsonObject = (JsonObject) parser.parse(new FileReader("/Users/equilibrium/IdeaProjects/AMCharts/api_key.json"));
+        secret = jsonObject.get("secret").getAsString();
+            System.out.println("secret key is: " + secret);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //String secret = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg247w7fZYc27Dr/cBJc5laTJFwLJLgs9jQaSeUfVU1kygCgYIKoZIzj0DAQehRANCAATOLyYZpBnAweJPU/FG4j0oA/z/qLTS7OJ5P839h9Rtngfs564at6azXK7udrYsTkRVZcpCJ7H5P8cPELcF7uUQ";
 
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.ES256;
@@ -88,6 +99,7 @@ public class JsonQueryUtils {
     public JsonObject getJson(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         String response = "";
+        BufferedReader in = null;
 
         try {
             URL url = new URL(link);
@@ -127,13 +139,13 @@ public class JsonQueryUtils {
                 //return null;
             }
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
             String inputLine;
 
             while((inputLine = in.readLine()) != null) {
                 response += inputLine;
             }
-            in.close();
+            //in.close();
 
         } catch (MalformedURLException ex) {
             System.out.println("MalformedURLException!!");
@@ -141,6 +153,14 @@ public class JsonQueryUtils {
             System.out.println("ProtocolException!!");
         } catch (IOException ex) {
             System.out.println("IOException!!");
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         this.responseTrimmed = response.trim();

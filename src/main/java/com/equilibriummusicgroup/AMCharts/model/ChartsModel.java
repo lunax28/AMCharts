@@ -15,6 +15,9 @@ public class ChartsModel {
 
     public StringBuilder getAlbumCharts(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
+        //Making sure to set nextLink to null for a new query!!
+        this.nextLink= null;
+
         //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
 
@@ -39,11 +42,14 @@ public class ChartsModel {
             JsonObject data = albums.get(0).getAsJsonObject();
 
             if (this.checkNode(data, "next")) {
-                loopLimit = 6;
+                System.out.println("LINE 42 data has next!");
+                loopLimit = 3;
                 this.nextLink = data.get("next").getAsString();
+            } else {
+                System.out.println("LINE 46 data has NOT next!");
             }
 
-            System.out.println("this.nextLink: " + this.nextLink);
+            System.out.println("LINE 49 this.nextLink: " + this.nextLink);
 
             JsonArray dataArray = data.get("data").getAsJsonArray();
 
@@ -61,7 +67,7 @@ public class ChartsModel {
                 if (this.checkNode(firstResult, "attributes")) {
                     attributes = firstResult.get("attributes").getAsJsonObject();
                 } else {
-                    break;
+                    continue;
                 }
 
                 //JsonObject attributes = firstResult.get("attributes").getAsJsonObject();
@@ -151,6 +157,12 @@ public class ChartsModel {
                 //incrementing the album position
                 position++;
             }
+
+
+            if (this.nextLink == null){
+                System.out.println("LINE 157 There's NO nextLink! Break Loop!");
+                break;
+            }
             //after going through all the first page array elements we pass
             //another link containing the second page results. This up to the 6th page.
             StringBuilder next = new StringBuilder("https://api.music.apple.com");
@@ -158,9 +170,11 @@ public class ChartsModel {
 
             link = next.toString();
             System.out.println("NEXT LINK LINE 155: " + link);
-            System.out.println("###END OF PAGE###\n");
+            System.out.println("LINE 170 END OF PAGE\n");
 
         }
+
+        System.out.println("###END OF LOOP###");
 
         return result;
     }

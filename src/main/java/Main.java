@@ -24,7 +24,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("AlbumChartsGui.fxml"));
             BorderPane root = (BorderPane)loader.load();
             AlbumChartsController controller = loader.getController();
