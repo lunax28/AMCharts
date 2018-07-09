@@ -138,14 +138,15 @@ public class SongsChartsController {
         try {
             loopLimit = Integer.parseInt(limit);
         } catch (NumberFormatException e) {
+            displayErrorMessage("Limit is negative or 0!");
             e.printStackTrace();
             return;
         }
 
-        if (loopLimit <= 0) {
+        /*if (loopLimit <= 0) {
             displayErrorMessage("Limit is negative or 0!");
             return;
-        }
+        }*/
 
         result = chartsModel.getSongsCharts(link, loopLimit, countryValue,this.genreMap.get(this.genreChoiceBox.getValue()).toString());
 
@@ -217,11 +218,11 @@ public class SongsChartsController {
 
     @FXML
     void changeSceneButton(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AlbumChartsGui.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AMChartsGui.fxml"));
 
         Parent root = loader.load();
 
-        AlbumChartsController controller = loader.getController();
+        AMChartsController controller = loader.getController();
         controller.setModel(this.chartsModel);
 
         Stage stage = (Stage) changeSceneButton.getScene().getWindow();

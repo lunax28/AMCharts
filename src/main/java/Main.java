@@ -24,9 +24,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AlbumChartsGui.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AMChartsGui.fxml"));
             BorderPane root = (BorderPane)loader.load();
-            AlbumChartsController controller = loader.getController();
+            AMChartsController controller = loader.getController();
             ChartsModel chartsModel = new ChartsModel();
             controller.setModel(chartsModel) ;
             Scene scene = new Scene(root);

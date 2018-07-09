@@ -174,7 +174,7 @@ public class ChartsModel {
 
         }
 
-        System.out.println("###END OF LOOP###");
+        System.out.println("\n###END OF LOOP###\n");
 
         return result;
     }
@@ -184,7 +184,7 @@ public class ChartsModel {
         //a StringBuilder object to store the list of albums
         StringBuilder result = new StringBuilder();
 
-        int offset = 490;
+        int offset = 50;
 
         String nextEndpoint = "";
 
@@ -321,12 +321,13 @@ public class ChartsModel {
 
                 nextLink = next.toString();
             } else {
-                offset = offset + 20;
+                /*offset = offset + 20;
                 nextEndpoint = "/v1/catalog/" + countryValue + "/charts?chart=most-played&genre=" + genreValue + "&offset=" + offset + "&types=songs";
                 StringBuilder next = new StringBuilder("https://api.music.apple.com");
                 next.append(nextEndpoint);
-                nextLink = next.toString();
+                nextLink = next.toString();*/
                 System.out.println("ChartsModel ATTENTION!!! NO NEXT FIELD!");
+                break;
 
             }
 
