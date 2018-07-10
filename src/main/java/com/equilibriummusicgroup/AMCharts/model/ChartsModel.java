@@ -511,4 +511,34 @@ public class ChartsModel {
     private Boolean checkNode(JsonObject gson, String key) {
         return gson.has(key);
     }
+
+
+    public StringBuilder getKeywordsHints(String link) throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        //a StringBuilder object to store the list of albums
+        StringBuilder result = new StringBuilder();
+
+        JsonObject jsonResponse = jsonQueryUtils.getJson(link);
+
+        System.out.println("Json Response in ChartsModel: " + jsonResponse.toString());
+
+        JsonObject results = jsonResponse.get("results").getAsJsonObject();
+
+        JsonArray termsArray = results.get("terms").getAsJsonArray();
+
+        System.out.println("terms: " + termsArray.toString());
+
+        int termsArraySize = termsArray.size();
+
+        for (int i = 0; i < termsArraySize; i++) {
+
+            result.append(termsArray.get(i).getAsString());
+            result.append("\n");
+
+        }
+
+        return result;
+
+
+    }
 }

@@ -62,12 +62,12 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </ChoiceBox>
-                  <Label prefHeight="28.0" prefWidth="34.0" text="Limit">
+                  <Label disable="true" prefHeight="28.0" prefWidth="34.0" text="Limit">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="limitTextField" prefHeight="27.0" prefWidth="54.0">
+                  <TextField fx:id="limitTextField" disable="true" prefHeight="27.0" prefWidth="54.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -81,7 +81,7 @@
       </VBox>
    </top>
    <center>
-      <TextArea fx:id="albumsTextArea" prefHeight="250.0" prefWidth="600.0" promptText="Album Charts will appear here:" BorderPane.alignment="CENTER">
+      <TextArea fx:id="albumsTextArea" prefHeight="250.0" prefWidth="600.0" promptText="The top songs chart will appear here:" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
@@ -92,12 +92,12 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ProgressBar fx:id="progressBar" prefHeight="29.0" prefWidth="205.0" progress="0.0">
+                  <ProgressBar fx:id="progressBar" disable="true" prefHeight="29.0" prefWidth="205.0" progress="0.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </ProgressBar>
-                  <Label fx:id="statusLabel" prefHeight="27.0" prefWidth="42.0" text="Status">
+                  <Label fx:id="statusLabel" disable="true" prefHeight="27.0" prefWidth="42.0" text="Status">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>

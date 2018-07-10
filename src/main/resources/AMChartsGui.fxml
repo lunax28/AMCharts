@@ -14,28 +14,28 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AMChartsController">
     <bottom>
         <VBox prefHeight="27.0" prefWidth="677.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label text="Alberto Vecchi" textAlignment="CENTER" textFill="#bfbfbf">
-               <VBox.margin>
-                  <Insets left="260.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Helvetica Neue Thin" size="13.0" />
-               </font>
-            </Label>
-         </children>
+            <children>
+                <Label text="Alberto Vecchi" textAlignment="CENTER" textFill="#bfbfbf">
+                    <VBox.margin>
+                        <Insets left="260.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="Helvetica Neue Thin" size="13.0" />
+                    </font>
+                </Label>
+            </children>
         </VBox>
     </bottom>
-   <center>
+    <center>
         <VBox prefHeight="106.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" text="APPLE MUSIC CHARTS" textFill="#464646">
                     <VBox.margin>
                         <Insets left="140.0" top="50.0" />
                     </VBox.margin>
-               <font>
-                  <Font name="Helvetica Neue Thin" size="33.0" />
-               </font>
+                    <font>
+                        <Font name="Helvetica Neue Thin" size="33.0" />
+                    </font>
                 </Label>
                 <HBox>
                     <children>
@@ -47,52 +47,52 @@
                                 <Font name="Helvetica Neue Bold" size="14.0" />
                             </font>
                         </Button>
-                  <Button fx:id="songsButton" defaultButton="true" layoutX="65.0" layoutY="10.0" mnemonicParsing="false" onAction="#changeSongsScene" prefHeight="54.0" prefWidth="115.0" text="SONGS">
-                     <font>
-                        <Font name="Helvetica Neue Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="keywordsButton" defaultButton="true" layoutX="65.0" layoutY="10.0" mnemonicParsing="false" onAction="#changeKeywordsButton" prefHeight="54.0" prefWidth="115.0" text="KEYWORDS">
-                     <font>
-                        <Font name="Helvetica Neue Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
-                  </Button>
+                        <Button fx:id="songsButton" defaultButton="true" layoutX="65.0" layoutY="10.0" mnemonicParsing="false" onAction="#changeSongsScene" prefHeight="54.0" prefWidth="115.0" text="SONGS">
+                            <font>
+                                <Font name="Helvetica Neue Bold" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="50.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Button fx:id="keywordsButton" defaultButton="true" layoutX="65.0" layoutY="10.0" mnemonicParsing="false" onAction="#changeKeywordsButton" prefHeight="54.0" prefWidth="115.0" text="KEYWORDS">
+                            <font>
+                                <Font name="Helvetica Neue Bold" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="50.0" />
+                            </HBox.margin>
+                        </Button>
                     </children>
                     <VBox.margin>
                         <Insets left="20.0" top="95.0" />
                     </VBox.margin>
                 </HBox>
             </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
         </VBox>
-   </center>
-   <top>
-          <MenuBar BorderPane.alignment="CENTER">
-              <menus>
-                  <Menu mnemonicParsing="false" text="File">
-                      <items>
-                          <MenuItem mnemonicParsing="false" text="Close" />
-                      </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Edit">
-                      <items>
-                          <MenuItem mnemonicParsing="false" text="Delete" />
-                      </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Help">
-                      <items>
-                          <MenuItem mnemonicParsing="false" onAction="#aboutItemAction" text="About" />
-                      </items>
-                  </Menu>
-              </menus>
-          </MenuBar>
-   </top>
+    </center>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#aboutItemAction" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
 </BorderPane>

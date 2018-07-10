@@ -133,7 +133,9 @@ public class SongsChartsController {
             return;
         }
 
-        String limit = this.limitTextField.getText();
+        int loopLimit = 50;
+
+        /*String limit = this.limitTextField.getText();
         int loopLimit = 1;
         try {
             loopLimit = Integer.parseInt(limit);
@@ -141,7 +143,7 @@ public class SongsChartsController {
             displayErrorMessage("Limit is negative or 0!");
             e.printStackTrace();
             return;
-        }
+        }*/
 
         /*if (loopLimit <= 0) {
             displayErrorMessage("Limit is negative or 0!");
