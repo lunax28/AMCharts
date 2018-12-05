@@ -63,15 +63,23 @@
                   </ChoiceBox>
                   <Button fx:id="getButton" defaultButton="true" mnemonicParsing="false" onAction="#getButtonAction" prefHeight="27.0" prefWidth="69.0" text="GET">
                      <HBox.margin>
-                        <Insets left="55.0" />
+                        <Insets left="10.0" />
                      </HBox.margin>
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
+                  <Button fx:id="topButton" defaultButton="true" layoutX="426.0" layoutY="10.0" mnemonicParsing="false" onAction="#getTopCharts" prefHeight="28.0" prefWidth="51.0" text="TOP">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
                   <Button fx:id="resetButton" layoutX="404.0" layoutY="10.0" mnemonicParsing="false" onAction="#resetAction" text="reset">
                      <HBox.margin>
-                        <Insets left="20.0" />
+                        <Insets left="10.0" />
                      </HBox.margin>
                   </Button>
                </children>

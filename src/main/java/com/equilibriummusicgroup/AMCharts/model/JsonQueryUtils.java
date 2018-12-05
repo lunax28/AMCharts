@@ -20,6 +20,8 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 /**
@@ -87,6 +89,8 @@ public class JsonQueryUtils {
                 .setIssuer("B68385H95A")
                 .signWith(signatureAlgorithm, eckey);
 
+
+
         System.out.println("BUILDER: " + builder.compact());
 
         preferences.get("builderString","");
@@ -121,6 +125,7 @@ public class JsonQueryUtils {
                 System.out.println("###getToken()###");
             } else {
                 basicAuth = "Bearer " + preferences.get("builderString","");
+                System.out.println("LINE 128 basicAuth: " + basicAuth);
                 System.out.println("Token retrieved from preferences");
             }
 
@@ -130,6 +135,27 @@ public class JsonQueryUtils {
 
             System.out.println("Sending 'GET' request to URL : " + url);
             System.out.println("Response Code : " + responseCode);
+
+            Map<String, List<String>> headers = httpCon.getHeaderFields();
+
+            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                String key = entry.getKey();
+                if (key != null) {
+                    if (key.equals("Retry-After")) {
+                        List<String> value = entry.getValue();
+                        //this.retryAfterSeconds = value.get(0);
+
+                        //System.out.println("RETRY AFTER: " + this.retryAfterSeconds + " seconds!");
+//                        throw new CustomException(seconds);
+                    } else {
+                        //System.out.println("NO RETRY AFTER!");
+                    }
+                }
+                System.out.println("Header Name: " + key);
+                List<String> value = entry.getValue();
+                System.out.println("Header Value: " + value.get(0));
+
+            }
 
             if (this.responseCode != 200) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);

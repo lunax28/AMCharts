@@ -5,6 +5,9 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -59,7 +62,7 @@ public class KeywordsChartsController {
     private Button changeSceneButton; // Value injected by FXMLLoader
 
     @FXML
-    private ObservableList<String> countryObsList = FXCollections.observableArrayList("de", "es", "fr", "it", "jp", "pt", "us", "at");
+    private ObservableList<String> countryObsList = FXCollections.observableArrayList("de", "es", "fr", "it", "jp", "pt", "us", "at","cn","br","ro");
 
 
 
@@ -89,7 +92,7 @@ public class KeywordsChartsController {
     }
 
     @FXML
-    void getButtonAction(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    void getButtonAction(ActionEvent event) throws InvalidKeySpecException, NoSuchAlgorithmException, MalformedURLException, URISyntaxException {
 
         StringBuilder result = new StringBuilder();
 
@@ -118,7 +121,7 @@ public class KeywordsChartsController {
 
     }
 
-    private String linkBuilder(String keywordSanitized) {
+    private String linkBuilder(String keywordSanitized) throws URISyntaxException, MalformedURLException {
         //https://api.music.apple.com/v1/catalog/us/search/hints?term=love&limit=10
         StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
 
@@ -128,7 +131,16 @@ public class KeywordsChartsController {
         link.append("&limit=50");
 
         System.out.println("LINK IS: " + link.toString());
-        return link.toString();
+
+        String xstr = "维也纳恩斯特哈佩尔球场" ;
+
+        URI uri = new URI(link.toString());
+        URL url = new URL(uri.toASCIIString());
+
+        System.out.println("URL: " + url.toString());
+
+
+        return url.toString();
     }
 
     @FXML

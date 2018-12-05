@@ -55,7 +55,7 @@ public class AlbumChartsController {
     private Map<String, Integer> genreMap;
 
     @FXML // ObservableList of ISO 3166-2 country codes
-    private ObservableList<String> countryObsList = FXCollections.observableArrayList("de","es","fr","it","jp","pt","us");
+    private ObservableList<String> countryObsList = FXCollections.observableArrayList("de","es","fr","gb","it","jp","pt","us","ro");
 
     @FXML // ObservableList of iTunes genres
     private ObservableList<String> genreObsList = FXCollections.observableArrayList("Alternative",
@@ -69,8 +69,10 @@ public class AlbumChartsController {
             "Electronic",
             "Environmental",
             "Fitness & Workout",
+            "Halloween",
             "Healing",
             "Holiday",
+            "House",
             "Instrumental",
             "Jazz",
             "Latino",
@@ -81,6 +83,7 @@ public class AlbumChartsController {
             "Relaxation",
             "Soundtrack",
             "Travel",
+            "Techno",
             "World");
 
     public AlbumChartsController(){
@@ -113,8 +116,10 @@ public class AlbumChartsController {
         genreMap.put("Electronic",7);
         genreMap.put("Environmental",1125);
         genreMap.put("Fitness & Workout",50);
+        genreMap.put("Halloween",1091);
         genreMap.put("Healing",1126);
         genreMap.put("Holiday",8);
+        genreMap.put("House",1048);
         genreMap.put("Instrumental",53);
         genreMap.put("Jazz",11);
         genreMap.put("Latino",12);
@@ -124,6 +129,7 @@ public class AlbumChartsController {
         genreMap.put("New Age",13);
         genreMap.put("Relaxation",1129);
         genreMap.put("Soundtrack",16);
+        genreMap.put("Techno", 1050);
         genreMap.put("Travel", 1130);
         genreMap.put("World",19);
 
@@ -187,6 +193,57 @@ public class AlbumChartsController {
         th.start();
 
     }
+
+
+    @FXML
+    void getTopCharts(ActionEvent event) {
+
+        this.albumsTextArea.clear();
+
+        String link = linkBuilderTopCharts();
+
+        Task<StringBuilder> task = new Task<StringBuilder>(){
+
+            @Override
+            protected StringBuilder call() throws Exception {
+                updateProgress(-1, -1);
+                StringBuilder result = new StringBuilder();
+                result = chartsModel.getAlbumCharts(link);
+                updateProgress(1, 1);
+                return result;
+            }
+
+        };
+
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                StringBuilder result = task.getValue();
+                albumsTextArea.setText(result.toString());
+
+            }
+        });
+
+        this.progressBar.progressProperty().bind(task.progressProperty());
+
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+
+    }
+
+    private String linkBuilderTopCharts() {
+        StringBuilder link = new StringBuilder("https://api.music.apple.com/v1/catalog/"); //us/charts?types=albums&genre=1127&limit=50
+
+        link.append(this.countryChoiceBox.getValue());
+        link.append("/charts?types=albums");
+        link.append("&limit=50");
+
+        System.out.println("TOP CHARTS LINK IS: " + link.toString());
+        return link.toString();
+    }
+
 
     private String linkBuilder() {
 

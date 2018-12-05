@@ -37,6 +37,14 @@
                         <Font name="Helvetica Neue Thin" size="33.0" />
                     </font>
                 </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="150.0" layoutY="60.0" text="v2.0" textFill="#dadada">
+               <font>
+                  <Font name="Helvetica Neue Thin" size="33.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="280.0" />
+               </VBox.margin>
+            </Label>
                 <HBox>
                     <children>
                         <Button fx:id="albumButton" defaultButton="true" mnemonicParsing="false" onAction="#ChangeAlbumScene" prefHeight="54.0" prefWidth="115.0" text="ALBUM">
