@@ -1,8 +1,8 @@
 ## Synopsis
 
-A GUI Java FX application that retrieves the latest charts by genre.
+A GUI Java FX application to retrieve the latest charts by genre.
 
-Currently suited for the New Age genre. 
+Currently suited for New Age. 
 
 ## Requirements
 
