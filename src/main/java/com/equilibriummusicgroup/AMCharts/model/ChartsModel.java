@@ -47,6 +47,7 @@ public class ChartsModel {
                 this.nextLink = data.get("next").getAsString();
             } else {
                 System.out.println("LINE 46 data has NOT next!");
+                this.nextLink= null;
             }
 
             System.out.println("LINE 49 this.nextLink: " + this.nextLink);
